@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://cuheihofndfy7"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/HealthUpgrade.cs" id="1_3ky7g"]
+[ext_resource type="Texture2D" uid="uid://ch55pehjo4ikp" path="res://Sprites/UI/HUD/Health Container.png" id="2_ef35t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yexxx"]
+atlas = ExtResource("2_ef35t")
+region = Rect2(0, 0, 5, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5loxq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yexxx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uco62"]
+
+[node name="HealthUpgrade" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_3ky7g")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5loxq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_uco62")
+
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

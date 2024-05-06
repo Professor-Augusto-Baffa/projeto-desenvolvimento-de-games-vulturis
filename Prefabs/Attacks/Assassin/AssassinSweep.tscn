@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=3 uid="uid://cfw75wcsar0k8"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Attacks/AttackBase.tscn" id="1_6lhep"]
+[ext_resource type="Texture2D" uid="uid://bf0oihiogui6" path="res://Sprites/Forms/Assassin/Attacks/VFX for Sweep Attack.png" id="2_3w43o"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Assasin/AssassinSweep.cs" id="2_5gqjr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dnqfb"]
+atlas = ExtResource("2_3w43o")
+region = Rect2(0, 0, 75, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cqga"]
+atlas = ExtResource("2_3w43o")
+region = Rect2(0, 23, 75, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxg5c"]
+atlas = ExtResource("2_3w43o")
+region = Rect2(0, 46, 75, 23)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_grcv3"]
+atlas = ExtResource("2_3w43o")
+region = Rect2(0, 69, 75, 23)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c7tdf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dnqfb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8cqga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxg5c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_grcv3")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h27ho"]
+size = Vector2(60, 12)
+
+[node name="AssassinSweep" instance=ExtResource("1_6lhep")]
+position = Vector2(38, 8)
+script = ExtResource("2_5gqjr")
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_c7tdf")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(-6, -6)
+shape = SubResource("RectangleShape2D_h27ho")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.5

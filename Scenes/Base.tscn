@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3 uid="uid://li05tctrrsyb"]
+
+[ext_resource type="Script" path="res://Scripts/SceneController/BaseScene.cs" id="1_346r3"]
+[ext_resource type="Script" path="res://Scripts/Camera/CameraTarget.cs" id="1_thu7n"]
+[ext_resource type="PackedScene" uid="uid://w0fpeo0n27sx" path="res://Prefabs/UI/HUD/AmmoBar.tscn" id="2_oj752"]
+[ext_resource type="PackedScene" uid="uid://dujqjq6vur10w" path="res://Scenes/Tests/Tileset Test.tscn" id="2_wqeyy"]
+[ext_resource type="Script" path="res://Scripts/Characters/Players/PlayerController.cs" id="3_5v322"]
+[ext_resource type="PackedScene" uid="uid://bxe75dmg3dsc0" path="res://Prefabs/Player.tscn" id="3_fie8k"]
+[ext_resource type="PackedScene" uid="uid://b17ybi6luixg3" path="res://Prefabs/UI/HUD/HealthBar.tscn" id="4_3g3p3"]
+[ext_resource type="Script" path="res://Scripts/Camera/Camera.cs" id="6_73gas"]
+[ext_resource type="Script" path="res://Scripts/SaveSystem/ProgressionController.cs" id="7_s7dxe"]
+
+[node name="Base" type="Node2D"]
+editor_description = "Base scene where persistent objects live."
+script = ExtResource("1_346r3")
+_firstScene = ExtResource("2_wqeyy")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthBarPlayer1" parent="CanvasLayer" instance=ExtResource("4_3g3p3")]
+
+[node name="AmmoBarPlayer1" parent="CanvasLayer" instance=ExtResource("2_oj752")]
+offset_left = 5.0
+offset_top = 18.0
+offset_right = 23.0
+offset_bottom = 28.0
+
+[node name="Player1" parent="." instance=ExtResource("3_fie8k")]
+
+[node name="PlayerController" type="Node" parent="Player1"]
+script = ExtResource("3_5v322")
+_moveLeft = &"move_left_p1"
+_moveRight = &"move_right_p1"
+_jump = &"jump_p1"
+_dodge = &"dodge_p1"
+_attack = &"attack_p1"
+_specialAction = &"special_action_p1"
+_interaction = &"interaction_p1"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_smoothed = true
+position_smoothing_enabled = true
+script = ExtResource("6_73gas")
+_shakeSpeed = 0.6
+
+[node name="ShakeTimer" type="Timer" parent="Camera2D"]
+one_shot = true
+
+[node name="CameraTarget" type="RemoteTransform2D" parent="." node_paths=PackedStringArray("_players")]
+remote_path = NodePath("../Camera2D")
+script = ExtResource("1_thu7n")
+_defaultOffset = Vector2(0, -8)
+_movementDirectionOffset = 8.0
+_players = [NodePath("../Player1")]
+
+[node name="ProgressionController" type="Node" parent="."]
+script = ExtResource("7_s7dxe")
+FormsUnlocked = ["Flower"]
+
+[connection signal="AmmoChanged" from="Player1" to="CanvasLayer/AmmoBarPlayer1" method="LoadContainers"]
+[connection signal="HealthChanged" from="Player1" to="CanvasLayer/HealthBarPlayer1" method="LoadContainers"]
+[connection signal="timeout" from="Camera2D/ShakeTimer" to="Camera2D" method="StopShaking"]

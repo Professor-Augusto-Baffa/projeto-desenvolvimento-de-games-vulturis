@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://b17ybi6luixg3"]
+
+[ext_resource type="Texture2D" uid="uid://np4m8a2grykv" path="res://Sprites/UI/HUD/Health Bar.png" id="1_mghfs"]
+[ext_resource type="Script" path="res://Scripts/UI/HUD/HealthBar.cs" id="2_sssvv"]
+[ext_resource type="PackedScene" uid="uid://bjbbuesomhdj6" path="res://Prefabs/UI/HUD/HealthContainer.tscn" id="3_x2hld"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_i3r25"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+texture = ExtResource("1_mghfs")
+texture_margin_left = 8.0
+texture_margin_top = 2.0
+texture_margin_right = 8.0
+texture_margin_bottom = 2.0
+
+[node name="HealthBar" type="PanelContainer"]
+offset_left = 5.0
+offset_top = 3.0
+offset_right = 21.0
+offset_bottom = 15.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_i3r25")
+script = ExtResource("2_sssvv")
+_healthContainerPrefab = ExtResource("3_x2hld")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HealthContainer" parent="HBoxContainer" instance=ExtResource("3_x2hld")]
+layout_mode = 2
+
+[node name="HealthContainer2" parent="HBoxContainer" instance=ExtResource("3_x2hld")]
+layout_mode = 2
+
+[node name="HealthContainer3" parent="HBoxContainer" instance=ExtResource("3_x2hld")]
+layout_mode = 2

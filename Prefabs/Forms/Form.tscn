@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://csvgdw17ei3mt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uvo3e"]
+resource_local_to_scene = true
+
+[node name="Form" type="Node2D"]
+editor_description = "Base scene for adding new Forms.
+To make a new Form, create an inherited scene from this scene, associate the form Sprite Frames to AnimatedSprite2D, and the new Form script to this node and add the FormStats resource.
+Also set up timers, add the timeout Timer signals to OnAttackEnded and OnSpecialActionEnded, and any other specific timers and signals implemented in the specific form. Do not change the timers wait time values, they are assigned in runtime according to the values in the FormStats resource."
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_uvo3e")
+
+[node name="AttackTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="SpecialActionTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AttackDelayTimer" type="Timer" parent="."]
+editor_description = "A form is a base node that can be added to Players, Enemies and Altars to change their forms.
+To create a new form, add the form script to the Form node, change the FormStats resource, and add the timeout Timer signals used by the script. Don't forget to also setup AnimatedSprite2D."
+one_shot = true

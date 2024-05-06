@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://doqm1qyac1pvh"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Attacks/AttackBase.tscn" id="1_xgj82"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Blinding Spider/BlindingSpiderBlind.cs" id="2_jbx8s"]
+[ext_resource type="Texture2D" uid="uid://r6c0b0uemwlk" path="res://Sprites/Forms/Blinding Spider/Attacks/Blind Attack 16x16.png" id="3_ul06n"]
+[ext_resource type="PackedScene" uid="uid://c0p1uqg24nuyl" path="res://Prefabs/LightSources/IntenseLight.tscn" id="4_1phuu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mkyev"]
+atlas = ExtResource("3_ul06n")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3c17a"]
+atlas = ExtResource("3_ul06n")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_778bd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mkyev")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3c17a")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s6lbq"]
+radius = 8.0
+
+[node name="BlindingSpiderBlind" instance=ExtResource("1_xgj82")]
+position = Vector2(3, -1)
+script = ExtResource("2_jbx8s")
+_paralizeDuration = 0.5
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_778bd")
+frame_progress = 0.461382
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("CircleShape2D_s6lbq")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.7
+
+[node name="IntenseLight" parent="." index="3" instance=ExtResource("4_1phuu")]
+position = Vector2(0, -7)

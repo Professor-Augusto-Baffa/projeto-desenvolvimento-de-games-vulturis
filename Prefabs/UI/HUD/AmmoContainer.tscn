@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfar42480khfa"]
+
+[ext_resource type="Texture2D" uid="uid://bcobgk0g0ncrh" path="res://Sprites/UI/HUD/Ammo Container.png" id="1_nitvc"]
+
+[node name="AmmoContainer" type="TextureRect"]
+texture = ExtResource("1_nitvc")

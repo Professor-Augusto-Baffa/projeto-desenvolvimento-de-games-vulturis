@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcilm4hhpcme2"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/SceneTransfer.cs" id="1_4mlwc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yvy5q"]
+
+[node name="SceneTransfer" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_4mlwc")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_yvy5q")
+
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

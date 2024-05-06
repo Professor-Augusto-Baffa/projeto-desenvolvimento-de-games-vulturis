@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://c4wctiybnnrj0"]
+
+[node name="006-Intersection" type="Node2D"]
+editor_description = "Sala de interseção entre os tipos de árvore. Essa sala tem estrutura vertical.
+O centro da sala tem raízes de todos os tipos, os cantos, levando às interseções, tem raízes dos tipos específicos dos seus caminhos."

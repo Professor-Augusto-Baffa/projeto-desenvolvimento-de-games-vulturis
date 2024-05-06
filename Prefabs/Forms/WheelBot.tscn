@@ -1,0 +1,39 @@
+[gd_scene load_steps=9 format=3 uid="uid://bkwuoer4jm0mu"]
+
+[ext_resource type="PackedScene" uid="uid://csvgdw17ei3mt" path="res://Prefabs/Forms/Form.tscn" id="1_5hqev"]
+[ext_resource type="Script" path="res://Scripts/Characters/Forms/WheelBot.cs" id="2_uy8gj"]
+[ext_resource type="SpriteFrames" uid="uid://5s2vimxo3kap" path="res://Resources/Sprite Frames/Wheel Bot Sprite Frames.tres" id="3_08dns"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/AttackStats.cs" id="3_pwc1h"]
+[ext_resource type="Shape2D" uid="uid://deay2r65rx6pw" path="res://Resources/Collision Shapes/Wheel Bot Collision Shape.tres" id="4_vlamm"]
+[ext_resource type="Script" path="res://Scripts/Characters/Forms/FormStats.cs" id="5_6s2ig"]
+
+[sub_resource type="Resource" id="Resource_3nuq8"]
+script = ExtResource("3_pwc1h")
+Duration = 1.0
+StartingDelay = 0.5
+
+[sub_resource type="Resource" id="Resource_7hvd3"]
+script = ExtResource("5_6s2ig")
+CollisonShape = ExtResource("4_vlamm")
+MaxHealth = 5
+MaxAmmo = 3
+StunChance = 20
+Speed = 70.0
+Jump = 1
+Attacks = [SubResource("Resource_3nuq8")]
+SpecialActionDuration = 1.0
+SpecialActionAmmoCost = 1
+
+[node name="Form" instance=ExtResource("1_5hqev")]
+script = ExtResource("2_uy8gj")
+_fireDashSpeed = 6000
+FormStats = SubResource("Resource_7hvd3")
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+position = Vector2(0, -1)
+sprite_frames = ExtResource("3_08dns")
+animation = &"idle"
+
+[connection signal="timeout" from="AttackTimer" to="." method="OnAttackEnded"]
+[connection signal="timeout" from="SpecialActionTimer" to="." method="OnSpecialActionEnded"]
+[connection signal="timeout" from="AttackDelayTimer" to="." method="OnAttackDelayEnded"]

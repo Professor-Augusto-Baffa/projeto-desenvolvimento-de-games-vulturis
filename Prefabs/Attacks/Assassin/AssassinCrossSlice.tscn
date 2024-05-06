@@ -1,0 +1,66 @@
+[gd_scene load_steps=11 format=3 uid="uid://b7gffl35qxrms"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Attacks/AttackBase.tscn" id="1_gwb28"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Assasin/AssassinCrossSlice.cs" id="2_0wua6"]
+[ext_resource type="Texture2D" uid="uid://dtip1hn4ueogq" path="res://Sprites/Forms/Assassin/Attacks/VFX for Cross Slice.png" id="3_o2bvu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dg3cr"]
+atlas = ExtResource("3_o2bvu")
+region = Rect2(0, 0, 43, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybeiv"]
+atlas = ExtResource("3_o2bvu")
+region = Rect2(0, 19, 43, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gl4j7"]
+atlas = ExtResource("3_o2bvu")
+region = Rect2(0, 38, 43, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acd16"]
+atlas = ExtResource("3_o2bvu")
+region = Rect2(0, 57, 43, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pvpy"]
+atlas = ExtResource("3_o2bvu")
+region = Rect2(0, 76, 43, 19)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tt5do"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dg3cr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ybeiv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gl4j7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_acd16")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pvpy")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e2ust"]
+size = Vector2(44, 11)
+
+[node name="AssassinCrossSlice" instance=ExtResource("1_gwb28")]
+position = Vector2(5, 5)
+script = ExtResource("2_0wua6")
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_tt5do")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_e2ust")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.2

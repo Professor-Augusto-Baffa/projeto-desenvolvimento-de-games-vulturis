@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://w0fpeo0n27sx"]
+
+[ext_resource type="Script" path="res://Scripts/UI/HUD/AmmoBar.cs" id="1_hodyv"]
+[ext_resource type="PackedScene" uid="uid://cfar42480khfa" path="res://Prefabs/UI/HUD/AmmoContainer.tscn" id="2_3st2g"]
+
+[node name="AmmoBar" type="HBoxContainer"]
+offset_right = 6.0
+offset_bottom = 10.0
+theme_override_constants/separation = 0
+script = ExtResource("1_hodyv")
+_ammoContainerPrefab = ExtResource("2_3st2g")
+_unactiveContainerColor = Color(0.227451, 0.227451, 0.227451, 1)
+
+[node name="AmmoContainer" parent="." instance=ExtResource("2_3st2g")]
+layout_mode = 2
+
+[node name="AmmoContainer2" parent="." instance=ExtResource("2_3st2g")]
+layout_mode = 2
+
+[node name="AmmoContainer3" parent="." instance=ExtResource("2_3st2g")]
+layout_mode = 2

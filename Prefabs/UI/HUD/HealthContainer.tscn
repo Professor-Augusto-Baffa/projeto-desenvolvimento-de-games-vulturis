@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjbbuesomhdj6"]
+
+[ext_resource type="Texture2D" uid="uid://ch55pehjo4ikp" path="res://Sprites/UI/HUD/Health Container.png" id="1_qenhv"]
+
+[node name="HealthContainer" type="TextureRect"]
+size_flags_horizontal = 0
+texture = ExtResource("1_qenhv")

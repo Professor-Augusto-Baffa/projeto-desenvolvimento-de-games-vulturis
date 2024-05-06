@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtvqp7rketqhw"]
+
+[ext_resource type="PackedScene" uid="uid://hdoelxe866l2" path="res://Prefabs/LightSources/Light.tscn" id="1_3cbsq"]
+
+[node name="DimLight" instance=ExtResource("1_3cbsq")]
+energy = 0.7
+texture_scale = 0.7

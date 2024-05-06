@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhc5hp82t8f5n"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/AmmoUpgrade.cs" id="1_nhqjg"]
+[ext_resource type="Texture2D" uid="uid://bcobgk0g0ncrh" path="res://Sprites/UI/HUD/Ammo Container.png" id="2_m2gu6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x3n8s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_m2gu6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_15gq1"]
+
+[node name="AmmoUpgrade" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_nhqjg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_x3n8s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_15gq1")
+
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

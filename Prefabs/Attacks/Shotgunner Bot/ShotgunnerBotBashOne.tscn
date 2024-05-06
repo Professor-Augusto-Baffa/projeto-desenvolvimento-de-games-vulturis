@@ -1,0 +1,52 @@
+[gd_scene load_steps=9 format=3 uid="uid://c47idr76e73ko"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Attacks/AttackBase.tscn" id="1_ubajk"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Shotgunner Bot/ShotgunnerBotBashOne.cs" id="2_6375i"]
+[ext_resource type="Texture2D" uid="uid://dtklny5gj8wxc" path="res://Sprites/Forms/Shotgunner Bot/Attacks/attack 92x36.png" id="3_w3yw0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4rf1"]
+atlas = ExtResource("3_w3yw0")
+region = Rect2(0, 0, 48, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mq5p7"]
+atlas = ExtResource("3_w3yw0")
+region = Rect2(0, 36, 48, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xr6vp"]
+atlas = ExtResource("3_w3yw0")
+region = Rect2(0, 72, 48, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xoda0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4rf1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mq5p7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xr6vp")
+}],
+"loop": false,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_msu3k"]
+size = Vector2(30, 19)
+
+[node name="ShotgunnerBotBashOne" instance=ExtResource("1_ubajk")]
+position = Vector2(8, 2)
+script = ExtResource("2_6375i")
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_xoda0")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -11.5)
+shape = SubResource("RectangleShape2D_msu3k")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.3

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0p1uqg24nuyl"]
+
+[ext_resource type="PackedScene" uid="uid://hdoelxe866l2" path="res://Prefabs/LightSources/Light.tscn" id="1_b7ttt"]
+
+[node name="IntenseLight" instance=ExtResource("1_b7ttt")]
+texture_scale = 1.7

@@ -1,0 +1,36 @@
+[gd_scene load_steps=9 format=3 uid="uid://dnlg6435ikqsl"]
+
+[ext_resource type="PackedScene" uid="uid://csvgdw17ei3mt" path="res://Prefabs/Forms/Form.tscn" id="1_2tped"]
+[ext_resource type="Script" path="res://Scripts/Characters/Forms/Flower.cs" id="2_1ghe0"]
+[ext_resource type="SpriteFrames" uid="uid://ce41yv2bukero" path="res://Resources/Sprite Frames/Flower Sprite Frames.tres" id="2_8igd0"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/AttackStats.cs" id="3_q1p58"]
+[ext_resource type="Shape2D" uid="uid://cht275yski3l7" path="res://Resources/Collision Shapes/Flower Collision Shape.tres" id="4_r5sur"]
+[ext_resource type="Script" path="res://Scripts/Characters/Forms/FormStats.cs" id="5_lxxw2"]
+
+[sub_resource type="Resource" id="Resource_um6k0"]
+script = ExtResource("3_q1p58")
+Duration = 1.2
+StartingDelay = 0.0
+
+[sub_resource type="Resource" id="Resource_6fcwc"]
+script = ExtResource("5_lxxw2")
+CollisonShape = ExtResource("4_r5sur")
+MaxHealth = 3
+MaxAmmo = 0
+StunChance = 100
+Speed = 50.0
+Jump = 0
+Attacks = [SubResource("Resource_um6k0")]
+SpecialActionDuration = 0.0
+SpecialActionAmmoCost = 0
+
+[node name="Form" instance=ExtResource("1_2tped")]
+script = ExtResource("2_1ghe0")
+FormStats = SubResource("Resource_6fcwc")
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+position = Vector2(0, -2)
+sprite_frames = ExtResource("2_8igd0")
+animation = &"idle"
+
+[connection signal="timeout" from="AttackTimer" to="." method="OnAttackEnded"]

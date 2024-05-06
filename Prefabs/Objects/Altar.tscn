@@ -1,0 +1,160 @@
+[gd_scene load_steps=24 format=3 uid="uid://djmfm7i3fhv5b"]
+
+[ext_resource type="Texture2D" uid="uid://c8ayoh560erxl" path="res://Sprites/Objects/Altar/idle 28x41.png" id="1_jknj3"]
+[ext_resource type="Script" path="res://Scripts/Objects/Altar.cs" id="1_qgpbl"]
+[ext_resource type="Texture2D" uid="uid://c3ios7g5ygcrh" path="res://Sprites/Objects/Altar/warp 28x41.png" id="2_2orm5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns7t4"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(0, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_io416"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(28, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1a0vx"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(56, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7jtld"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(84, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1v5ka"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(112, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2aeox"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(140, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p6s0b"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(168, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_urlcv"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(196, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5gsy"]
+atlas = ExtResource("1_jknj3")
+region = Rect2(224, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6sarl"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(0, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sf0tc"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(28, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phuoo"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(56, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahf7o"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(84, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e21je"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(112, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pjysf"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(140, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qva1j"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(168, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_blpio"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(196, 0, 28, 41)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eb73n"]
+atlas = ExtResource("2_2orm5")
+region = Rect2(224, 0, 28, 41)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i2h2s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ns7t4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_io416")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1a0vx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7jtld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1v5ka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2aeox")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6s0b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_urlcv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5gsy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6sarl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sf0tc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_phuoo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahf7o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e21je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pjysf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qva1j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_blpio")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eb73n")
+}],
+"loop": false,
+"name": &"use",
+"speed": 9.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_64b1j"]
+size = Vector2(28, 40.5)
+
+[node name="Altar" type="Area2D"]
+editor_description = "Altar that unlocks a specific form. Please assign the Form node to this node."
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_qgpbl")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_i2h2s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_64b1j")

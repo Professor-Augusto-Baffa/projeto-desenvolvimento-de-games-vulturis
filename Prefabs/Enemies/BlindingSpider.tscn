@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://cxxft0njvjsoa"]
+
+[ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Enemies/Enemy.tscn" id="1_wpqde"]
+[ext_resource type="PackedScene" uid="uid://b4c0r6du73i4a" path="res://Prefabs/Forms/BlindingSpider.tscn" id="2_4eqpk"]
+[ext_resource type="Shape2D" uid="uid://bfssojut3652r" path="res://Resources/Collision Shapes/Blinding Spider Collision Shape.tres" id="4_bkyxf"]
+[ext_resource type="Shape2D" uid="uid://ddan6tjnf6vg6" path="res://Resources/Detection Areas/Medium Detection Area.tres" id="4_ylo0u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4c2t4"]
+size = Vector2(32, 20)
+
+[node name="BlindingSpider" instance=ExtResource("1_wpqde")]
+
+[node name="Form" parent="." index="0" instance=ExtResource("2_4eqpk")]
+
+[node name="CollisionShape2D" parent="." index="2"]
+shape = ExtResource("4_bkyxf")
+
+[node name="CollisionShape2D" parent="DetectionRange" index="0"]
+position = Vector2(0, -18)
+shape = ExtResource("4_ylo0u")
+
+[node name="CollisionShape2D" parent="AttackRange" index="0"]
+position = Vector2(1.25, -7)
+shape = SubResource("RectangleShape2D_4c2t4")

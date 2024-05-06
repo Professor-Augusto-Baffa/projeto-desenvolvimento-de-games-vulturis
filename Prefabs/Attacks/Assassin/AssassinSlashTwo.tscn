@@ -1,0 +1,66 @@
+[gd_scene load_steps=11 format=3 uid="uid://dof7jb004i1dw"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Attacks/AttackBase.tscn" id="1_4lky8"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Assasin/AssassinSlashTwo.cs" id="2_6skhs"]
+[ext_resource type="Texture2D" uid="uid://dlcjbvj4brb2x" path="res://Sprites/Forms/Assassin/Attacks/VFX for attack 2.png" id="2_dydis"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2twiy"]
+atlas = ExtResource("2_dydis")
+region = Rect2(0, 0, 32, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vjlj"]
+atlas = ExtResource("2_dydis")
+region = Rect2(0, 19, 32, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iyj7j"]
+atlas = ExtResource("2_dydis")
+region = Rect2(0, 38, 32, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4kbqy"]
+atlas = ExtResource("2_dydis")
+region = Rect2(0, 57, 32, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8i7ra"]
+atlas = ExtResource("2_dydis")
+region = Rect2(0, 76, 32, 19)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3xcr5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2twiy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3vjlj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iyj7j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4kbqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i7ra")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t0dav"]
+size = Vector2(31, 18)
+
+[node name="AssassinSlashTwo" instance=ExtResource("1_4lky8")]
+position = Vector2(5, 5)
+script = ExtResource("2_6skhs")
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_3xcr5")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_t0dav")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.5

@@ -1,0 +1,70 @@
+[gd_scene load_steps=12 format=3 uid="uid://chlgcgdv6fwt8"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Attacks/AttackBase.tscn" id="1_p26sq"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Wheel Bot/WheelBotFireDash.cs" id="2_a8ebm"]
+[ext_resource type="Texture2D" uid="uid://daotu2q8snmfb" path="res://Sprites/Forms/Wheel Bot/Attacks/dash particles 96x26.png" id="2_v3r2f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e006w"]
+atlas = ExtResource("2_v3r2f")
+region = Rect2(0, 0, 96, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwvg3"]
+atlas = ExtResource("2_v3r2f")
+region = Rect2(0, 26, 96, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vucsu"]
+atlas = ExtResource("2_v3r2f")
+region = Rect2(0, 52, 96, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gs5vq"]
+atlas = ExtResource("2_v3r2f")
+region = Rect2(0, 78, 96, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ayewy"]
+atlas = ExtResource("2_v3r2f")
+region = Rect2(0, 104, 96, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_le7kj"]
+atlas = ExtResource("2_v3r2f")
+region = Rect2(0, 130, 96, 26)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8tngn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e006w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwvg3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vucsu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gs5vq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ayewy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_le7kj")
+}],
+"loop": false,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_de08x"]
+size = Vector2(95, 17)
+
+[node name="WheelBotFireDash" instance=ExtResource("1_p26sq")]
+position = Vector2(52, 5)
+script = ExtResource("2_a8ebm")
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_8tngn")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0.5, -3.5)
+shape = SubResource("RectangleShape2D_de08x")

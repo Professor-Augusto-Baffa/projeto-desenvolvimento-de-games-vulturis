@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://bv4jnqee3777u"]
+
+[ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Enemies/Enemy.tscn" id="1_0tsta"]
+[ext_resource type="PackedScene" uid="uid://dd2h354feproi" path="res://Prefabs/Forms/ShotgunnerBot.tscn" id="2_bvef0"]
+[ext_resource type="Shape2D" uid="uid://du8apk3yknf8n" path="res://Resources/Collision Shapes/Shotgunner Bot Collision Shape.tres" id="3_o7hrb"]
+[ext_resource type="Shape2D" uid="uid://ddan6tjnf6vg6" path="res://Resources/Detection Areas/Medium Detection Area.tres" id="4_ufdog"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdtyk"]
+size = Vector2(46, 39.5)
+
+[node name="ShotgunnerBot" instance=ExtResource("1_0tsta")]
+
+[node name="Form" parent="." index="0" instance=ExtResource("2_bvef0")]
+
+[node name="CollisionShape2D" parent="." index="2"]
+shape = ExtResource("3_o7hrb")
+
+[node name="CollisionShape2D" parent="DetectionRange" index="0"]
+position = Vector2(0, -10)
+shape = ExtResource("4_ufdog")
+
+[node name="CollisionShape2D" parent="AttackRange" index="0"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_vdtyk")

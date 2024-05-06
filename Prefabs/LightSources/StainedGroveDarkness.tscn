@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dpu4pohx3342u"]
+
+[node name="StainedGroveDarkness" type="DirectionalLight2D"]
+color = Color(0.0901961, 0.0901961, 0.0901961, 1)
+energy = 9.0
+blend_mode = 1

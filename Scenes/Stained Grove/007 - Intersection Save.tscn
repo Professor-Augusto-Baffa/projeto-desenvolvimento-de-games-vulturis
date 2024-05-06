@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://qj4js6gnw64g"]
+
+[node name="007-IntersectionSave" type="Node2D"]
+editor_description = "Sala de save na parte do meio à esquerda na interseção."

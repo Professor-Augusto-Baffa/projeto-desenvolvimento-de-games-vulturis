@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://cemcwjdmaxgyg"]
+
+[ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Enemies/Enemy.tscn" id="1_shomi"]
+[ext_resource type="PackedScene" uid="uid://dnlg6435ikqsl" path="res://Prefabs/Forms/Flower.tscn" id="2_jtxx7"]
+[ext_resource type="Shape2D" uid="uid://ct3xuog7cnsys" path="res://Resources/Detection Areas/Small Detection Area.tres" id="4_2ciny"]
+[ext_resource type="Shape2D" uid="uid://cht275yski3l7" path="res://Resources/Collision Shapes/Flower Collision Shape.tres" id="4_4kllh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6xqv"]
+size = Vector2(48, 30)
+
+[node name="Flower" instance=ExtResource("1_shomi")]
+
+[node name="Form" parent="." index="0" instance=ExtResource("2_jtxx7")]
+
+[node name="CollisionShape2D" parent="." index="2"]
+shape = ExtResource("4_4kllh")
+
+[node name="CollisionShape2D" parent="DetectionRange" index="0"]
+position = Vector2(0, -7)
+shape = ExtResource("4_2ciny")
+
+[node name="CollisionShape2D" parent="AttackRange" index="0"]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape2D_v6xqv")

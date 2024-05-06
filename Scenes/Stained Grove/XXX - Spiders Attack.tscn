@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d3kgc33uujcw0"]
+
+[node name="Xxx-SpidersAttack" type="Node2D"]
+editor_description = "Essa sala é o desafio que vem antes da sala de Altar do Wheel Bot. Essa sala é repleta de raizes de sangue.
+Várias blinding spiders caem do teto da sala, o jogador deve correr até o outro lado antes de ser alcançado.
+Na volta, pode matar as aranhas na forma de Wheel Bot com mais facilidade."

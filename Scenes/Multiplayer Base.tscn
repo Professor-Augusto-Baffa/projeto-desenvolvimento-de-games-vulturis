@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://w24ifoq75dxt"]
+
+[ext_resource type="PackedScene" uid="uid://li05tctrrsyb" path="res://Scenes/Base.tscn" id="1_6bo8l"]
+[ext_resource type="PackedScene" uid="uid://b17ybi6luixg3" path="res://Prefabs/UI/HUD/HealthBar.tscn" id="1_i1cth"]
+[ext_resource type="PackedScene" uid="uid://w0fpeo0n27sx" path="res://Prefabs/UI/HUD/AmmoBar.tscn" id="3_2e13e"]
+[ext_resource type="PackedScene" uid="uid://bxe75dmg3dsc0" path="res://Prefabs/Player.tscn" id="3_jhd14"]
+[ext_resource type="Script" path="res://Scripts/Characters/Players/PlayerController.cs" id="4_xwng7"]
+
+[node name="Base" instance=ExtResource("1_6bo8l")]
+
+[node name="HealthBarPlayer2" parent="CanvasLayer" index="2" instance=ExtResource("1_i1cth")]
+offset_left = 60.0
+offset_right = 91.0
+
+[node name="AmmoBarPlayer2" parent="CanvasLayer" index="3" instance=ExtResource("3_2e13e")]
+offset_left = 60.0
+offset_top = 18.0
+offset_right = 78.0
+offset_bottom = 28.0
+
+[node name="Player1" parent="." index="1"]
+position = Vector2(-5, 0)
+
+[node name="Player2" parent="." index="2" instance=ExtResource("3_jhd14")]
+position = Vector2(5, 0)
+
+[node name="PlayerController" type="Node" parent="Player2" index="4"]
+script = ExtResource("4_xwng7")
+_moveLeft = &"move_left_p2"
+_moveRight = &"move_right_p2"
+_jump = &"jump_p2"
+_dodge = &"dodge_p2"
+_attack = &"attack_p2"
+_specialAction = &"special_action_p2"
+_interaction = &"interaction_p2"
+
+[node name="CameraTarget" parent="." index="4" node_paths=PackedStringArray("_players")]
+_players = [NodePath("../Player1"), NodePath("../Player2")]
+
+[connection signal="AmmoChanged" from="Player2" to="CanvasLayer/AmmoBarPlayer2" method="LoadContainers"]
+[connection signal="HealthChanged" from="Player2" to="CanvasLayer/HealthBarPlayer2" method="LoadContainers"]
