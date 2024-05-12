@@ -3,11 +3,11 @@
 ## Integrantes
 
 Benito André Pepe - 2311720
-Eduardo Luna - 
+Eduardo Dantas Luna - 2111484
 
 ## Entrega
 
-[Apresentação]()
+[Apresentação](https://studio.youtube.com/video/jMylUEtXCjU/edit)
 
 [GDD em Markdown (com gifs)](Docs/GDD/Vulturis%20Shape%20of%20Shadows.md)
 
