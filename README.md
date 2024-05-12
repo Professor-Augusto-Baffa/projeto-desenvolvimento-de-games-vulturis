@@ -7,7 +7,7 @@ Eduardo Dantas Luna - 2111484
 
 ## Entrega
 
-[Apresentação](https://studio.youtube.com/video/jMylUEtXCjU/edit)
+[Apresentação](https://www.youtube.com/watch?v=jMylUEtXCjU)
 
 [GDD em Markdown (com gifs)](Docs/GDD/Vulturis%20Shape%20of%20Shadows.md)
 
