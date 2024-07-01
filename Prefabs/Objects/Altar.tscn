@@ -176,4 +176,4 @@ texture = SubResource("GradientTexture2D_g3n6n")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_uk8vc")
-volume_db = 12.0
+bus = &"Sound Effects"

@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Godot;
 using SceneController;
-using Players;
 
 namespace Objects;
 
@@ -14,11 +12,8 @@ public partial class SceneTransfer : Area2D {
 	[Export]
 	private Vector2 _positionInNextScene;
 
-	public override async void _Ready() {
+	public override void _Ready() {
 		_nextScenePrefab = GD.Load<PackedScene>(_nextScene);
-		GetNode<CollisionShape2D>("CollisionShape2D").Disabled = true;
-		await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
-		GetNode<CollisionShape2D>("CollisionShape2D").Disabled = false;
 	}
 
 	private void OnBodyEntered(Node2D node) => CallDeferred(nameof(InstantiateNextScene)); // Changing scenes should only happen after physics calculations
@@ -26,12 +21,6 @@ public partial class SceneTransfer : Area2D {
 	private void InstantiateNextScene() {
 		BaseScene baseScene = GetNode<BaseScene>("../../");
 		baseScene.ChangeScene(nextScene: _nextScenePrefab.Instantiate<Scene>());
-		MovePlayers(BaseScene.Players);
-	}
-
-	private void MovePlayers(List<Player> players) {
-		foreach (Player player in players) {
-			player.Position = _positionInNextScene;
-		}
+		BaseScene.MovePlayersTo(_positionInNextScene);
 	}
 }

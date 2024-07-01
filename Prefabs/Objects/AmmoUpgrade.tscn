@@ -30,6 +30,6 @@ shape = SubResource("RectangleShape2D_15gq1")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_gr5ud")
-volume_db = 12.0
+bus = &"Sound Effects"
 
 [connection signal="body_entered" from="." to="." method="OnBodyEntered"]

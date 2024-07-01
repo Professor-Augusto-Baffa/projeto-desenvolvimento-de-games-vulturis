@@ -31,7 +31,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_rclwl")
 _music = ExtResource("2_gjuit")
-_musicVolume = 12.0
 
 [node name="FocusController" type="Control" parent="." node_paths=PackedStringArray("_firstFocusedNode")]
 anchors_preset = 0

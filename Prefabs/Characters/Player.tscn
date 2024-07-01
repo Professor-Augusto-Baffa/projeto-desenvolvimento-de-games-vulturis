@@ -88,7 +88,7 @@ one_shot = true
 one_shot = true
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-volume_db = 12.0
+bus = &"Sound Effects"
 
 [connection signal="timeout" from="Timers/AmmoRecoveryTimer" to="." method="RestoreAmmo"]
 [connection signal="timeout" from="Timers/JumpTimer" to="." method="StopJumping"]

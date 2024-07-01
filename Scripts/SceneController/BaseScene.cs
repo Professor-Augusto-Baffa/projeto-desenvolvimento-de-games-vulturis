@@ -28,15 +28,15 @@ public partial class BaseScene : Node {
 	private AudioStreamPlayer _musicPlayer;
 
 	[Export]
-	public PackedScene FirstScene { private get; set; }
+	private PackedScene _firstScene;
 	[Export]
-	public Vector2 PlayersInitialPosition { private get; set; }
+	private Vector2 _playersInitialPosition;
 
 	public static BaseScene Instantiate(SaveFileModel save, bool isMultiplayer) {
 		BaseScene scene = isMultiplayer ? _multiplayerPrefab.Instantiate<BaseScene>() : _prefab.Instantiate<BaseScene>();
 
-		if (save.Scene != null) scene.FirstScene = save.Scene;
-		scene.PlayersInitialPosition = save.Position;
+		if (save.Scene != null) scene._firstScene = save.Scene;
+		scene._playersInitialPosition = save.Position;
 
 		scene.LoadPlayers();
 		int index = 0;
@@ -62,8 +62,8 @@ public partial class BaseScene : Node {
 		UICanvas = GetNode<CanvasLayer>("CanvasLayer");
 		_musicPlayer = GetNode<AudioStreamPlayer>("MusicPlayer");
 
-		ChangeScene(FirstScene.Instantiate<Scene>());
-		MovePlayersToInitialPosition(Players);
+		ChangeScene(_firstScene.Instantiate<Scene>());
+		MovePlayersTo(position: _playersInitialPosition, shouldAddToCurrentPosition: true);
 		ChangePlayerIndicatorVisibility(Settings.PlayerIndentifiersEnabled);
 	}
 
@@ -84,22 +84,32 @@ public partial class BaseScene : Node {
 		Camera.PositionSmoothingEnabled = true;
 	}
 
-	private void LoadPlayers() {
-		Players = new List<Player>() { GetNode<Player>("Player1") };
-		if (GetNodeOrNull("Player2") is Player player) {
-			Players.Add(player);
-		}
-	}
+	public static async void MovePlayersTo(Vector2 position, bool shouldAddToCurrentPosition = false) {
+		foreach (Player player in Players) {
+			CollisionShape2D collisionShape = player.GetNode<CollisionShape2D>("CollisionShape2D");
+			collisionShape.Disabled = true;
 
-	private void MovePlayersToInitialPosition(List<Player> players) {
-		foreach (Player player in players) {
-			player.Position += PlayersInitialPosition;
+			if (shouldAddToCurrentPosition) {
+				player.Position += position;
+			} else {
+				player.Position = position;
+			}
+
+			await player.ToSignal(source: player.GetTree(), signal: SceneTree.SignalName.ProcessFrame);
+			collisionShape.Disabled = false;
 		}
 	}
 
 	public static void ChangePlayerIndicatorVisibility(bool visibility) {
 		foreach (Player player in Players) {
 			player.GetNode<Sprite2D>("PlayerIndicator").Visible = visibility;
+		}
+	}
+
+	private void LoadPlayers() {
+		Players = new List<Player>() { GetNode<Player>("Player1") };
+		if (GetNodeOrNull("Player2") is Player player) {
+			Players.Add(player);
 		}
 	}
 

@@ -7,8 +7,6 @@ namespace Menus.MainMenu;
 public partial class MainMenu : Control {
 	[Export]
 	private AudioStream _music;
-	[Export]
-	private float _musicVolume;
 
 	private static bool _loadedSettingsForTheFirstTime = false;
 
@@ -18,7 +16,7 @@ public partial class MainMenu : Control {
 		AudioStreamPlayer musicPlayer = new() {
 			Name = "MusicPlayer",
 			Stream = _music,
-			VolumeDb = 12,
+			Bus = "Music",
 			ProcessMode = ProcessModeEnum.Always
 		};
 		AddChild(musicPlayer);
@@ -46,8 +44,8 @@ public partial class MainMenu : Control {
 	}
 
 	private static void LoadSettings() {
-		SettingsFileModel? settings = SaveController.LoadSettings();
-		if (settings is not null) Settings.Settings.SetValuesFrom(settings);
+		SettingsFileModel settings = SaveController.LoadSettings() ?? new();
+        Settings.Settings.SetValuesFrom(settings);
 		_loadedSettingsForTheFirstTime = true;
 	}
 }

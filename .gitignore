@@ -22,9 +22,9 @@ data_*/
 *.vsix
 
 # Sprites are not open source, you can purchase them from penusbmic
-# Sprites/*
-# !Sprites/UI/
-# Sprites/UI/*
-# !Sprites/UI/Fonts/
+Sprites/*
+!Sprites/UI/
+Sprites/UI/*
+!Sprites/UI/Fonts/
 
-# Audio/
+Audio/

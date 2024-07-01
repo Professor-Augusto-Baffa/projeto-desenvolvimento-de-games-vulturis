@@ -11,12 +11,16 @@ config_version=5
 [application]
 
 config/name="Vulturis"
-run/main_scene="res://Scenes/Base.tscn"
+run/main_scene="res://Scenes/Menus/MainMenu.tscn"
 config/use_custom_user_dir=true
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 boot_splash/bg_color=Color(0.0509804, 0.0509804, 0.0509804, 1)
 boot_splash/show_image=false
 config/icon="res://Sprites/UI/Icons/placeholder_icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://Resources/AudioBusLayout.tres"
 
 [display]
 

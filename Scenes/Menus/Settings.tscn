@@ -28,7 +28,7 @@ script = ExtResource("1_pinos")
 [node name="FocusController" type="Control" parent="." node_paths=PackedStringArray("_firstFocusedNode")]
 anchors_preset = 0
 script = ExtResource("1_plhgt")
-_firstFocusedNode = NodePath("../SettingsBorder/FullscreenCheckButton")
+_firstFocusedNode = NodePath("../SettingsBorder/ScrollContainer/VScrollBar/MusicVolume/HSlider")
 
 [node name="BlackBackground" type="ColorRect" parent="."]
 layout_mode = 1
@@ -57,54 +57,101 @@ offset_bottom = 167.0
 theme = ExtResource("5_bnv8e")
 region_rect = Rect2(0, 0, 48, 48)
 
-[node name="HitstopCheckButton" type="CheckButton" parent="SettingsBorder"]
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsBorder"]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 90.0
-offset_right = 257.0
-offset_bottom = 114.0
-focus_neighbor_top = NodePath("../ScreenShakeCheckButton")
-focus_neighbor_bottom = NodePath("../CreditsButtonBorder")
-text = "Freeze game after damage is taken or dealt"
+offset_left = 12.0
+offset_top = 20.0
+offset_right = 262.0
+offset_bottom = 124.0
+follow_focus = true
 
-[node name="ScreenShakeCheckButton" type="CheckButton" parent="SettingsBorder"]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 73.0
-offset_right = 257.0
-offset_bottom = 97.0
-focus_neighbor_top = NodePath("../FriendlyFireCheckButton")
-focus_neighbor_bottom = NodePath("../HitstopCheckButton")
-text = "Screen shake"
+[node name="VScrollBar" type="VBoxContainer" parent="SettingsBorder/ScrollContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("5_bnv8e")
+theme_override_constants/separation = -4
 
-[node name="FriendlyFireCheckButton" type="CheckButton" parent="SettingsBorder"]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 56.0
-offset_right = 257.0
-offset_bottom = 80.0
-focus_neighbor_top = NodePath("../PlayerIdentifiersCheckBox")
-focus_neighbor_bottom = NodePath("../ScreenShakeCheckButton")
-text = "Friendly fire"
+[node name="MusicVolume" type="Control" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="PlayerIdentifiersCheckBox" type="CheckButton" parent="SettingsBorder"]
+[node name="Label" type="Label" parent="SettingsBorder/ScrollContainer/VScrollBar/MusicVolume"]
+layout_mode = 2
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 52.0
+offset_bottom = 11.0
+text = "Music volume"
+
+[node name="HSlider" type="HSlider" parent="SettingsBorder/ScrollContainer/VScrollBar/MusicVolume"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+offset_left = 133.0
+offset_right = 233.0
+offset_bottom = 16.0
+focus_neighbor_top = NodePath("../../../../../BackButton")
+focus_neighbor_bottom = NodePath("../../SoundEffectsVolume/HSlider")
+max_value = 3.0
+step = 0.15
+scrollable = false
+
+[node name="SoundEffectsVolume" type="Control" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsBorder/ScrollContainer/VScrollBar/SoundEffectsVolume"]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 39.0
-offset_right = 257.0
-offset_bottom = 63.0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 79.0
+offset_bottom = 13.0
+text = "Sound effects volume
+"
+
+[node name="HSlider" type="HSlider" parent="SettingsBorder/ScrollContainer/VScrollBar/SoundEffectsVolume"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 0
+offset_left = 133.0
+offset_top = 2.0
+offset_right = 233.0
+offset_bottom = 18.0
+focus_neighbor_top = NodePath("../../MusicVolume/HSlider")
+focus_neighbor_bottom = NodePath("../../FullscreenCheckButton")
+max_value = 3.0
+step = 0.15
+scrollable = false
+
+[node name="FullscreenCheckButton" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../SoundEffectsVolume/HSlider")
+focus_neighbor_bottom = NodePath("../PlayerIdentifiersCheckBox")
+text = "Fullscreen"
+
+[node name="PlayerIdentifiersCheckBox" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+layout_mode = 2
 focus_neighbor_top = NodePath("../FullscreenCheckButton")
 focus_neighbor_bottom = NodePath("../FriendlyFireCheckButton")
 text = "Player identifiers"
 
-[node name="FullscreenCheckButton" type="CheckButton" parent="SettingsBorder"]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 22.0
-offset_right = 257.0
-offset_bottom = 46.0
-focus_neighbor_bottom = NodePath("../PlayerIdentifiersCheckBox")
-text = "Fullscreen"
+[node name="FriendlyFireCheckButton" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../PlayerIdentifiersCheckBox")
+focus_neighbor_bottom = NodePath("../ScreenShakeCheckButton")
+text = "Friendly fire"
+
+[node name="ScreenShakeCheckButton" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../FriendlyFireCheckButton")
+focus_neighbor_bottom = NodePath("../HitstopCheckButton")
+text = "Screen shake"
+
+[node name="HitstopCheckButton" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../ScreenShakeCheckButton")
+focus_neighbor_bottom = NodePath("../../../CreditsButtonBorder/Button")
+text = "Freeze game after damage is taken or dealt"
 
 [node name="CreditsButtonBorder" parent="SettingsBorder" instance=ExtResource("4_wi3gd")]
 layout_mode = 0
@@ -112,7 +159,6 @@ offset_left = 211.0
 offset_top = 122.0
 offset_right = 265.0
 offset_bottom = 154.0
-focus_neighbor_top = NodePath("../HitstopCheckButton")
 
 [node name="ColorRect" type="ColorRect" parent="SettingsBorder/CreditsButtonBorder"]
 layout_mode = 0
@@ -174,9 +220,11 @@ text = "Settings"
 
 [connection signal="pressed" from="BackButton" to="." method="SaveSettings"]
 [connection signal="pressed" from="BackButton" to="BackButton" method="OnPressed"]
-[connection signal="toggled" from="SettingsBorder/HitstopCheckButton" to="." method="OnHitStopButtonToggled"]
-[connection signal="toggled" from="SettingsBorder/ScreenShakeCheckButton" to="." method="OnScreenShakeButtonToggled"]
-[connection signal="toggled" from="SettingsBorder/FriendlyFireCheckButton" to="." method="OnFriendlyFireButtonToggled"]
-[connection signal="toggled" from="SettingsBorder/PlayerIdentifiersCheckBox" to="." method="OnPlayerIdentifiersButtonToggled"]
-[connection signal="toggled" from="SettingsBorder/FullscreenCheckButton" to="." method="OnFullScreenButtonToggled"]
+[connection signal="value_changed" from="SettingsBorder/ScrollContainer/VScrollBar/MusicVolume/HSlider" to="." method="OnMusicVolumeSliderValueChanged"]
+[connection signal="value_changed" from="SettingsBorder/ScrollContainer/VScrollBar/SoundEffectsVolume/HSlider" to="." method="OnSoundEffectsVolumeSliderDragEnded"]
+[connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/FullscreenCheckButton" to="." method="OnFullScreenButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/PlayerIdentifiersCheckBox" to="." method="OnPlayerIdentifiersButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/FriendlyFireCheckButton" to="." method="OnFriendlyFireButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/ScreenShakeCheckButton" to="." method="OnScreenShakeButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/HitstopCheckButton" to="." method="OnHitStopButtonToggled"]
 [connection signal="pressed" from="SettingsBorder/CreditsButtonBorder/Button" to="SettingsBorder/CreditsButtonBorder/Button" method="OnPressed"]

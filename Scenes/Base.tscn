@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/SceneController/BaseScene.cs" id="1_346r3"]
 [ext_resource type="Script" path="res://Scripts/Camera/CameraTarget.cs" id="1_thu7n"]
 [ext_resource type="PackedScene" uid="uid://w0fpeo0n27sx" path="res://Prefabs/UI/HUD/AmmoBar.tscn" id="2_oj752"]
-[ext_resource type="PackedScene" uid="uid://ccps1d53giivt" path="res://Scenes/Stained Grove/001 - Starting Room.tscn" id="2_tqjn7"]
+[ext_resource type="PackedScene" uid="uid://ccps1d53giivt" path="res://Scenes/Stained Grove/001 - Starting Room.tscn" id="2_xcde4"]
 [ext_resource type="Script" path="res://Scripts/Characters/Players/PlayerController.cs" id="3_5v322"]
 [ext_resource type="PackedScene" uid="uid://bxe75dmg3dsc0" path="res://Prefabs/Characters/Player.tscn" id="3_fie8k"]
 [ext_resource type="PackedScene" uid="uid://b17ybi6luixg3" path="res://Prefabs/UI/HUD/HealthBar.tscn" id="4_3g3p3"]
@@ -15,7 +15,7 @@
 [node name="Base" type="Node2D"]
 editor_description = "Base scene where persistent objects live."
 script = ExtResource("1_346r3")
-FirstScene = ExtResource("2_tqjn7")
+_firstScene = ExtResource("2_xcde4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -69,7 +69,7 @@ FormsUnlocked = ["Flower"]
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 process_mode = 3
-volume_db = 12.0
+bus = &"Music"
 
 [connection signal="AmmoChanged" from="Player1" to="CanvasLayer/AmmoBarPlayer1" method="LoadContainers"]
 [connection signal="HealthChanged" from="Player1" to="CanvasLayer/HealthBarPlayer1" method="LoadContainers"]
