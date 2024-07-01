@@ -14,8 +14,11 @@ public partial class SceneTransfer : Area2D {
 	[Export]
 	private Vector2 _positionInNextScene;
 
-	public override void _Ready() {
+	public override async void _Ready() {
 		_nextScenePrefab = GD.Load<PackedScene>(_nextScene);
+		GetNode<CollisionShape2D>("CollisionShape2D").Disabled = true;
+		await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
+		GetNode<CollisionShape2D>("CollisionShape2D").Disabled = false;
 	}
 
 	private void OnBodyEntered(Node2D node) => CallDeferred(nameof(InstantiateNextScene)); // Changing scenes should only happen after physics calculations

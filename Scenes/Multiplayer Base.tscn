@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://w24ifoq75dxt"]
+[gd_scene load_steps=7 format=3 uid="uid://w24ifoq75dxt"]
 
 [ext_resource type="PackedScene" uid="uid://li05tctrrsyb" path="res://Scenes/Base.tscn" id="1_6bo8l"]
 [ext_resource type="PackedScene" uid="uid://b17ybi6luixg3" path="res://Prefabs/UI/HUD/HealthBar.tscn" id="1_i1cth"]
 [ext_resource type="PackedScene" uid="uid://w0fpeo0n27sx" path="res://Prefabs/UI/HUD/AmmoBar.tscn" id="3_2e13e"]
-[ext_resource type="PackedScene" uid="uid://bxe75dmg3dsc0" path="res://Prefabs/Player.tscn" id="3_jhd14"]
+[ext_resource type="PackedScene" uid="uid://bxe75dmg3dsc0" path="res://Prefabs/Characters/Player.tscn" id="3_jhd14"]
 [ext_resource type="Script" path="res://Scripts/Characters/Players/PlayerController.cs" id="4_xwng7"]
+[ext_resource type="Texture2D" uid="uid://o2wn3u582oow" path="res://Sprites/UI/HUD/Player Indicator 2.png" id="6_14i2c"]
 
 [node name="Base" instance=ExtResource("1_6bo8l")]
 
@@ -33,6 +34,11 @@ _dodge = &"dodge_p2"
 _attack = &"attack_p2"
 _specialAction = &"special_action_p2"
 _interaction = &"interaction_p2"
+
+[node name="PlayerIndicator" type="Sprite2D" parent="Player2" index="7"]
+modulate = Color(1, 1, 1, 0.752941)
+position = Vector2(0, -18)
+texture = ExtResource("6_14i2c")
 
 [node name="CameraTarget" parent="." index="4" node_paths=PackedStringArray("_players")]
 _players = [NodePath("../Player1"), NodePath("../Player2")]

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://lekydbkvrxb1"]
+
+[ext_resource type="PackedScene" uid="uid://dtvqp7rketqhw" path="res://Prefabs/LightSources/DimLight.tscn" id="1_4y1mv"]
+
+[node name="DimLight" instance=ExtResource("1_4y1mv")]
+color = Color(0.815686, 0.27451, 0.27451, 1)

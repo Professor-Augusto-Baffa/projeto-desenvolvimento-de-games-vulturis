@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnjyqm53b57in"]
+
+[ext_resource type="PackedScene" uid="uid://bnjxqr2slugll" path="res://Prefabs/UI/Overlays/TutorialOverlay.tscn" id="1_x2np2"]
+
+[node name="ShotgunnerBotTutorialOverlay" instance=ExtResource("1_x2np2")]
+
+[node name="RichTextLabel" parent="PopUp/Border" index="1"]
+text = "Some forms can use special abilities, including Shotgunner Bots!
+Special abilites are powerful skills that cost ammo to activate.
+You restore ammo over time.
+
+Shotgunner Bots can shot distant enemies or open doors with their special attack.
+
+Player 1: Z
+Player 2: M
+Controller: Top action button (Y)"
+
+[node name="Label" parent="PopUp/TitleBoder" index="1"]
+text = "Shotgunner Bot"

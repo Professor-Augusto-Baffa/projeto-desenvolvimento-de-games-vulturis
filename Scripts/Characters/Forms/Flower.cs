@@ -6,7 +6,7 @@ namespace Forms;
 
 public partial class Flower : Form {
     public override void Attack() {
-        AttackBase.Instantiate<FlowerSpores>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+        CurrentAttack = AttackBase.Instantiate<FlowerSpores>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
         Sprite.Play("attack");
 
         AttackTimer.WaitTime = Attacks[0].Duration;
@@ -14,11 +14,6 @@ public partial class Flower : Form {
         CurrentState = State.Attacking;
     }
 
-    public override void OnAttackEnded() {
-        AttackTimer.Stop();
-        CurrentState = State.Idle;
-    }
-
     public override void SpecialAction() { }
-    public override void OnSpecialActionEnded() {}
+    public override void OnSpecialActionEnded() { }
 }

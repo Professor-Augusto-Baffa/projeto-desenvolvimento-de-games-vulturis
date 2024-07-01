@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd6y4me7yueyd"]
+
+[ext_resource type="PackedScene" uid="uid://bnjxqr2slugll" path="res://Prefabs/UI/Overlays/TutorialOverlay.tscn" id="1_b7kft"]
+
+[node name="BlindingSpiderTutorialOverlay" instance=ExtResource("1_b7kft")]
+
+[node name="RichTextLabel" parent="PopUp/Border" index="1"]
+text = "Blinding Spider attacks paralyze monsters for a short time.
+
+Blinding Spiders can also jump. Hold the jump button to jump higher.
+
+Player 1: W
+Player 2: I
+Controller: Bottom action button (A)"
+
+[node name="Label" parent="PopUp/TitleBoder" index="1"]
+text = "Blinding Spider"

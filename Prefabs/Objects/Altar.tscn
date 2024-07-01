@@ -1,8 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://djmfm7i3fhv5b"]
+[gd_scene load_steps=27 format=3 uid="uid://djmfm7i3fhv5b"]
 
 [ext_resource type="Texture2D" uid="uid://c8ayoh560erxl" path="res://Sprites/Objects/Altar/idle 28x41.png" id="1_jknj3"]
 [ext_resource type="Script" path="res://Scripts/Objects/Altar.cs" id="1_qgpbl"]
 [ext_resource type="Texture2D" uid="uid://c3ios7g5ygcrh" path="res://Sprites/Objects/Altar/warp 28x41.png" id="2_2orm5"]
+[ext_resource type="AudioStream" uid="uid://clnsqq3et6h1p" path="res://Audio/Sound Effects/Objects/altar.wav" id="4_uk8vc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ns7t4"]
 atlas = ExtResource("1_jknj3")
@@ -146,6 +147,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_64b1j"]
 size = Vector2(28, 40.5)
 
+[sub_resource type="Gradient" id="Gradient_bgkqu"]
+offsets = PackedFloat32Array(0, 0.455285)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g3n6n"]
+gradient = SubResource("Gradient_bgkqu")
+fill_from = Vector2(1, 1)
+
 [node name="Altar" type="Area2D"]
 editor_description = "Altar that unlocks a specific form. Please assign the Form node to this node."
 collision_layer = 8
@@ -158,3 +167,13 @@ sprite_frames = SubResource("SpriteFrames_i2h2s")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 shape = SubResource("RectangleShape2D_64b1j")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -3)
+scale = Vector2(0.40625, 0.65625)
+energy = 0.5
+texture = SubResource("GradientTexture2D_g3n6n")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_uk8vc")
+volume_db = 12.0

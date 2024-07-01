@@ -1,11 +1,24 @@
-[gd_resource type="TileSet" load_steps=60 format=3 uid="uid://ck0ypg2a4m36q"]
+[gd_resource type="TileSet" load_steps=75 format=3 uid="uid://ck0ypg2a4m36q"]
 
 [ext_resource type="Texture2D" uid="uid://er2ovr47yeqj" path="res://Sprites/Tilesets/DARK Base Tileset.png" id="1_r3e8h"]
 [ext_resource type="Texture2D" uid="uid://cxput8w1awmlx" path="res://Sprites/Tilesets/Roots.png" id="2_2w0qu"]
 [ext_resource type="Texture2D" uid="uid://hqjqug35idcr" path="res://Sprites/Tilesets/Animated/Animated Trees.png" id="2_m3fok"]
 [ext_resource type="PackedScene" uid="uid://hdoelxe866l2" path="res://Prefabs/LightSources/Light.tscn" id="2_w0rj0"]
+[ext_resource type="PackedScene" uid="uid://b13vrcofq83jq" path="res://Prefabs/LightSources/Colored/GreenIntenseLight.tscn" id="3_mg71j"]
 [ext_resource type="PackedScene" uid="uid://dtvqp7rketqhw" path="res://Prefabs/LightSources/DimLight.tscn" id="3_xy283"]
 [ext_resource type="PackedScene" uid="uid://c0p1uqg24nuyl" path="res://Prefabs/LightSources/IntenseLight.tscn" id="4_0b6ty"]
+[ext_resource type="PackedScene" uid="uid://cd244vtjokh40" path="res://Prefabs/LightSources/Colored/GreenLight.tscn" id="4_v5sx4"]
+[ext_resource type="PackedScene" uid="uid://lekydbkvrxb1" path="res://Prefabs/LightSources/Colored/RedDimLight.tscn" id="5_pywjn"]
+[ext_resource type="PackedScene" uid="uid://dhn5r8gasmrxa" path="res://Prefabs/Objects/Door.tscn" id="6_ueh50"]
+[ext_resource type="PackedScene" uid="uid://c2yrss2harp3h" path="res://Prefabs/LightSources/Colored/RedIntenseLight.tscn" id="6_ujnic"]
+[ext_resource type="PackedScene" uid="uid://dlorrubuc5yox" path="res://Prefabs/LightSources/Colored/RedLight.tscn" id="7_0smyb"]
+[ext_resource type="PackedScene" uid="uid://8cn54dch163i" path="res://Prefabs/Objects/Panel.tscn" id="7_burte"]
+[ext_resource type="PackedScene" uid="uid://csem55c8qj4bv" path="res://Prefabs/LightSources/Colored/BlueDimLight.tscn" id="10_otwsu"]
+[ext_resource type="PackedScene" uid="uid://lhy1sv6m3bop" path="res://Prefabs/LightSources/Colored/BlueIntenseLight.tscn" id="11_omutk"]
+[ext_resource type="PackedScene" uid="uid://cts260yx8u3hd" path="res://Prefabs/LightSources/Colored/BlueLight.tscn" id="12_jlpep"]
+[ext_resource type="PackedScene" uid="uid://c4bg3ekdpmtie" path="res://Prefabs/LightSources/Colored/GreenDimLight.tscn" id="13_ae70t"]
+[ext_resource type="PackedScene" uid="uid://bjj3vxpepbmwx" path="res://Prefabs/Particles/FloatingParticles.tscn" id="14_nl3xa"]
+[ext_resource type="PackedScene" uid="uid://cpcv7q6eorvmf" path="res://Prefabs/Particles/WaterDrip.tscn" id="15_nix0l"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_rd05m"]
 polygon = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
@@ -398,9 +411,6 @@ texture = ExtResource("1_r3e8h")
 3:5/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 3:5/0/physics_layer_0/angular_velocity = 0.0
 3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-6.125, -8, 8, -8, 8, -5.125, -6.25, -5)
-0:6/0 = 0
-0:6/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:6/0/physics_layer_0/angular_velocity = 0.0
 2:6/0 = 0
 2:6/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 2:6/0/physics_layer_0/angular_velocity = 0.0
@@ -849,6 +859,25 @@ resource_name = "Light Sources"
 scenes/1/scene = ExtResource("2_w0rj0")
 scenes/3/scene = ExtResource("3_xy283")
 scenes/4/scene = ExtResource("4_0b6ty")
+scenes/6/scene = ExtResource("10_otwsu")
+scenes/7/scene = ExtResource("11_omutk")
+scenes/8/scene = ExtResource("12_jlpep")
+scenes/9/scene = ExtResource("13_ae70t")
+scenes/10/scene = ExtResource("3_mg71j")
+scenes/11/scene = ExtResource("4_v5sx4")
+scenes/12/scene = ExtResource("5_pywjn")
+scenes/13/scene = ExtResource("6_ujnic")
+scenes/14/scene = ExtResource("7_0smyb")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_w5vib"]
+resource_name = "Particles"
+scenes/1/scene = ExtResource("14_nl3xa")
+scenes/2/scene = ExtResource("15_nix0l")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_vg5jd"]
+resource_name = "Objects"
+scenes/2/scene = ExtResource("6_ueh50")
+scenes/3/scene = ExtResource("7_burte")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_506e3"]
 texture = ExtResource("2_m3fok")
@@ -3588,3 +3617,5 @@ sources/0 = SubResource("TileSetAtlasSource_o761e")
 sources/5 = SubResource("TileSetAtlasSource_506e3")
 sources/6 = SubResource("TileSetAtlasSource_21btk")
 sources/1 = SubResource("TileSetScenesCollectionSource_rqeeq")
+sources/3 = SubResource("TileSetScenesCollectionSource_vg5jd")
+sources/2 = SubResource("TileSetScenesCollectionSource_w5vib")

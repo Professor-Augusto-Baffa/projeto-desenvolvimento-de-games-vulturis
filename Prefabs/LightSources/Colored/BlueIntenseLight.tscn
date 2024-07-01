@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://lhy1sv6m3bop"]
+
+[ext_resource type="PackedScene" uid="uid://c0p1uqg24nuyl" path="res://Prefabs/LightSources/IntenseLight.tscn" id="1_3u84a"]
+
+[node name="IntenseLight" instance=ExtResource("1_3u84a")]
+color = Color(0.545098, 0.776471, 0.8, 1)
+energy = 1.5

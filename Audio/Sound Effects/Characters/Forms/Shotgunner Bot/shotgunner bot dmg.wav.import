@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b8qt7xy5i0nob"
+path="res://.godot/imported/shotgunner bot dmg.wav-2c0473d8bd2d58e2fc137c1a4f03d9f1.sample"
+
+[deps]
+
+source_file="res://Audio/Sound Effects/Characters/Forms/Shotgunner Bot/shotgunner bot dmg.wav"
+dest_files=["res://.godot/imported/shotgunner bot dmg.wav-2c0473d8bd2d58e2fc137c1a4f03d9f1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

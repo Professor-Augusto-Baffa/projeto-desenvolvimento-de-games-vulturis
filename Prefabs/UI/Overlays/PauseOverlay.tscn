@@ -1,0 +1,147 @@
+[gd_scene load_steps=10 format=3 uid="uid://mtddv4ynd0r5"]
+
+[ext_resource type="Theme" uid="uid://c1qvrddia7qy5" path="res://Resources/Themes/TinyFontTheme.tres" id="1_m3etx"]
+[ext_resource type="Script" path="res://Scripts/UI/HUD/PauseOverlay.cs" id="2_ahm1d"]
+[ext_resource type="PackedScene" uid="uid://cyus8utcb7p4s" path="res://Prefabs/UI/Border.tscn" id="3_hpqhf"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/SceneChangerButton.cs" id="4_5s0d1"]
+
+[sub_resource type="Animation" id="Animation_vm4c8"]
+resource_name = "fade"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 0.541176)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hl0ci"]
+_data = {
+"fade": SubResource("Animation_vm4c8")
+}
+
+[sub_resource type="InputEventKey" id="InputEventKey_1lgtv"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="InputEventJoypadButton" id="InputEventJoypadButton_xjf32"]
+device = -1
+button_index = 6
+
+[sub_resource type="Shortcut" id="Shortcut_2i84f"]
+events = [SubResource("InputEventKey_1lgtv"), SubResource("InputEventJoypadButton_xjf32")]
+
+[node name="PauseOverlay" type="Control" node_paths=PackedStringArray("_firstFocusedNode")]
+process_mode = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_m3etx")
+script = ExtResource("2_ahm1d")
+_settingsScenePath = "res://Scenes/Menus/Settings.tscn"
+_firstFocusedNode = NodePath("Border/ContinueButton")
+_actionsThatActivateFocus = [&"pause"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+process_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect"]
+libraries = {
+"": SubResource("AnimationLibrary_hl0ci")
+}
+
+[node name="Border" parent="." instance=ExtResource("3_hpqhf")]
+process_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -39.5
+offset_top = -29.0
+offset_right = 39.5
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Border"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 74.0
+offset_bottom = 54.0
+color = Color(0, 0, 0, 1)
+
+[node name="ReturnToMenuButton" type="Button" parent="Border"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = 7.0
+offset_right = 30.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Return to menu"
+flat = true
+script = ExtResource("4_5s0d1")
+_scenePath = "res://Scenes/Menus/MainMenu.tscn"
+_shouldKeepMusic = false
+
+[node name="SettingsButton" type="Button" parent="Border"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.5
+offset_top = -7.0
+offset_right = 16.5
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Settings"
+flat = true
+
+[node name="ContinueButton" type="Button" parent="Border"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -21.0
+offset_right = 18.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+shortcut = SubResource("Shortcut_2i84f")
+text = "Continue"
+flat = true
+
+[connection signal="pressed" from="Border/ReturnToMenuButton" to="." method="OnContinueButtonPressed"]
+[connection signal="pressed" from="Border/ReturnToMenuButton" to="Border/ReturnToMenuButton" method="ChangeScene"]
+[connection signal="pressed" from="Border/SettingsButton" to="." method="OnSettingsButtonPressed"]
+[connection signal="pressed" from="Border/ContinueButton" to="." method="OnContinueButtonPressed"]

@@ -1,31 +1,26 @@
-using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Characters;
 using Forms;
-using Players;
+using Menus.Settings;
 
 namespace Enemies;
 
 public partial class Enemy : Character {
-	public new Form Form => base.Form;
 	public Timer _paralyzeTimer;
 	private Timer _fadeOutTimer;
-	public Timer _coolDownTimer;
+	private Timer _coolDownTimer;
 
-	public override bool IsInvincible => _currentState == State.Stunned || _currentState == State.Paralyzed || _currentState == State.Defeated;
+	public int PlayerDirection () => this.Position.X < Target!.Position.X ? 1 : -1;
 
-	public override bool IsDefeated => _currentState == State.Defeated;
-	public bool IsStunned => _currentState == State.Stunned;
+	public override bool IsInvincible => IsDefeated || IsStunned || _isParalyzed;
+	public override bool IsDefeated => Health <= 0;
+
+	public bool IsStunned { get; private set; }
+	private bool _isParalyzed; // TODO move to StateChart
+	public bool CanChangeState => !_isParalyzed && _coolDownTimer.IsStopped();
 
 	public bool IsBeeingUsedInTransformation = false; // Used to avoid multiple players transforming into a single enemy
-
-	private const int _deathAnimationDuration = 1;
-
-	public enum State { Idle, Stunned, Paralyzed, Defeated, Attack, Chase, CoolDown }
-	[Export]
-	public State _currentState = State.Idle;
-	private FMS _stateMachine;
 
 	[ExportGroup("Hit flash")]
 	[Export]
@@ -33,20 +28,29 @@ public partial class Enemy : Character {
 	[Export]
 	private float _flashDuration;
 
-	// FIXME move this to state machine
-	// checks if the player is in the attack range of the enemy
-	public bool InAttackRange = false;
-	// checks if the player is in the detection range of the enemy
-	public bool InDetectionRange = false;
-	private readonly List<Character> _charactersInDetectionRange = new();
-	private readonly List<Character> _charactersInAttackRange = new();
+	[ExportGroup("Sound Effects")]
+	[Export] private AudioStream StunnedSound;
+
+	// These signals notify to the StateController the enemy should change its state
+	[Signal] public delegate void NewTargetNeededEventHandler();
+	[Signal] public delegate void AttackEndedEventHandler();
+	[Signal] public delegate void DefeatedEventHandler();
+	[Signal] public delegate void StunnedEventHandler();
+	[Signal] public delegate void ParalyzedEventHandler();
 
 	#nullable enable
-	private Character? _target;
+	public Character? Target;
+
+	// check if there is a Hole in the left or right
+	public bool IsHoleL = false;
+	public bool IsHoleR = false;
+	
+	// if true, the last hole or wall was at left, if false, the last hole or wall was at right
+	public bool lastObstacle = true;
+	
 
 	public override void _Ready() {
 		base._Ready();
-		_stateMachine = GetNode<FMS>("FMS");
 		_paralyzeTimer = GetNode<Timer>("Timers/ParalyzeTimer");
 		_fadeOutTimer = GetNode<Timer>("Timers/FadeOutTimer");
 		_coolDownTimer = GetNode<Timer>("Timers/CoolDownTimer");
@@ -54,68 +58,8 @@ public partial class Enemy : Character {
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		_currentState = _stateMachine.NextState();
-
-		if (_target is not null && _target.IsDefeated) {
-			if (_charactersInDetectionRange.Contains(_target)) {
-				_charactersInDetectionRange.Remove(_target);
-				InDetectionRange = false;
-			}
-			if (_charactersInAttackRange.Contains(_target)) {
-				_charactersInAttackRange.Remove(_target);
-				InAttackRange = false;
-			}
-			_target = LookForNextTarget();
-		}
-		
-		// if form attack timer is attacking and not in the attack state stop the attack
-		if (Form.CurrentState == Form.State.Attacking && _currentState != State.Attack) {
-			Form.OnAttackEnded();
-		}
-
-		switch (_currentState) {
-			case State.Defeated:
-				Fade(delta);
-				break;
-			case State.Attack:
-				if (Form.CanAttack) Form.Attack();
-				break;
-			case State.Idle:
-				Idle(delta);
-				UpdateMovementAnimations();
-				break;
-			case State.Chase:
-				Chase(delta);
-				UpdateMovementAnimations();
-				break;
-			case State.CoolDown:
-				if(_coolDownTimer.IsStopped()) CoolDown();
-				break;
-			default:
-				break;
-		}
-	}
-	
-	/// <summary>
-	/// Function to handle the end of cooldown of the enemy attack
-	/// </summary>
-	public void OnCoolDownTimeout() {
-		_currentState = State.Idle;
-	}
-	
-	/// <summary>
-	/// Function to handle the end of the attack of the enemy
-	/// </summary>
-	public void CoolDown() {
-		_currentState = State.CoolDown;
-		_coolDownTimer.Start();
-	}
-
-	protected override void UpdateMovementAnimations() {
-		Sprite.Play(this.Velocity != Vector2.Zero ? "walk" : "idle");
-
-		if (_target != null) {
-			Sprite.FlipH = this.Position.X > _target.Position.X;
+		if (Target is not null && Target.IsDefeated) {
+			EmitSignal(SignalName.NewTargetNeeded);
 		}
 	}
 
@@ -124,9 +68,8 @@ public partial class Enemy : Character {
 	/// </summary>
 	/// <param name="delta"></param>
 	public void Idle(double delta) {
-		// I don't know exactly whaty pathfining gives, I'm going to belive it is a vector
-		// TODO: deals with needed jumps... 
 		Walk(delta, 0);
+		UpdateMovementAnimations();
 	}
 
 	/// <summary>
@@ -135,9 +78,16 @@ public partial class Enemy : Character {
 	/// <param name="delta"></param>
 	public void Chase(double delta) {
 		// pathfind to the nearest player
-		float direction = this.Position.X < _target!.Position.X ? 1 : -1;
+		float direction = PlayerDirection();
+		if (IsHoleR && direction == 1) {
+			direction *= 0;
+		} else if(IsHoleL && direction == -1) {
+			direction *= 0;
+		}
 		Walk(delta, direction);
+		UpdateMovementAnimations();
 	}
+	
 
 	/// <summary>
 	/// Function handle for walking
@@ -148,20 +98,87 @@ public partial class Enemy : Character {
 		this.Velocity = new Vector2(direction * FormStats.Speed, this.Velocity.Y + (float)(Gravity * delta));
 		MoveAndSlide();
 	}
+	
+	public void WalkWithAnimation(double delta, float direction) {
+		// If there is a hole in that dire
+		if((direction > 0 && IsHoleR) || (direction < 0 && IsHoleL)) 
+			direction = 0;
+		
+		Walk(delta, direction);
+		UpdateMovementAnimations();
+	}
 
-	public void TakeDamage(int damage, bool attackFlipH, float? frameFreezeDuration = null) {
+	protected override void UpdateMovementAnimations() {
+		Sprite.Play(this.Velocity != Vector2.Zero ? "walk" : "idle");
+
+		if (Target != null) {
+			Sprite.FlipH = this.Position.X > Target.Position.X;
+		}
+		if(this.Velocity.X < 0)
+			Sprite.FlipH = true;
+		else if(this.Velocity.X > 0)
+			Sprite.FlipH = false;
+	}
+
+	public void StartAttack() {
+		if (Form.CanAttack) Form.Attack();
+	}
+
+	public void Attack(double delta) {
+		if (Form.CurrentState == Form.State.Idle) {
+			EmitSignal(SignalName.AttackEnded);
+		}
+		else {
+			if (Form.CanAttack) Form.Attack();
+		}
+	}
+
+	public async void StartCooldown() {
+		_coolDownTimer.Start();
+		Sprite.Play("idle");
+		await ToSignal(source: _coolDownTimer, signal: Timer.SignalName.Timeout);
+		EmitSignal(SignalName.NewTargetNeeded);
+	}
+
+	public override async void StartParalyze(float paralyzeDuration, bool shouldApplyEffects = false) {
+		this.Velocity = Vector2.Zero;
+		_isParalyzed = true;
+		EmitSignal(SignalName.Paralyzed);
+		if (shouldApplyEffects) {
+			Sprite.Modulate = ParalyzeColor;
+			SoundEffectsPlayer.Stream = ParalyzeSound;
+			SoundEffectsPlayer.Play();
+		}
+		await ToSignal(
+			source: GetTree().CreateTimer(paralyzeDuration),
+			signal: SceneTreeTimer.SignalName.Timeout
+		);
+
+		Sprite.Modulate = Colors.White;
+		_isParalyzed = false;
+		EmitSignal(SignalName.NewTargetNeeded);
+	}
+
+	public async void TakeDamage(int damage, bool attackFlipH, float? frameFreezeDuration = null) {
 		Health -= damage;
-		if (Health <= 0) {
+
+		SoundEffectsPlayer.Stream = Form.DamageSound;
+		SoundEffectsPlayer.Play();
+
+		if (IsDefeated) {
 			if (IsStunnedByRandomChance(attackedFromBehind: attackFlipH == Sprite.FlipH)) {
 				GetStunned();
-			}
-			else {
+			} else {
 				Die();
 			}
+
+			await ToSignal(source: SoundEffectsPlayer, signal: AudioStreamPlayer2D.SignalName.Finished);
+			SoundEffectsPlayer.Stream = Form.DeathSound;
+			SoundEffectsPlayer.Play();
 		}
 
 		Flash();
-		FrameFreeze(frameFreezeDuration);
+		if (Settings.HitStopEnabled) FrameFreeze(frameFreezeDuration);
 	}
 
 	private bool IsStunnedByRandomChance(bool attackedFromBehind) {
@@ -174,17 +191,11 @@ public partial class Enemy : Character {
 	public void GetStunned() {
 		StringName animation = AnimationNames.Contains("stun") ? "stun" : "death";
 		Sprite.Play(animation);
-		_currentState = State.Stunned;
-	}
+		IsStunned = true;
+		EmitSignal(SignalName.Stunned);
 
-	public override async void StartParalyze(float paralyzeDuration) {
-		this.Velocity = Vector2.Zero;
-		_currentState = State.Paralyzed;
-		await ToSignal(
-			source: GetTree().CreateTimer(paralyzeDuration),
-			signal: SceneTreeTimer.SignalName.Timeout
-		);
-		_currentState = State.Idle;
+		SoundEffectsPlayer.Stream = StunnedSound;
+		SoundEffectsPlayer.Play();
 	}
 
 	private async void Flash() {
@@ -198,68 +209,17 @@ public partial class Enemy : Character {
 	}
 
 	private async void Die() {
-		_currentState = State.Defeated;
+		EmitSignal(SignalName.Defeated);
 		Sprite.Play("death");
-		await ToSignal(
-			source: GetTree().CreateTimer(_deathAnimationDuration),
-			signal: SceneTreeTimer.SignalName.Timeout
-		);
+		await ToSignal(source: Sprite, signal: AnimatedSprite2D.SignalName.AnimationFinished);
 		_fadeOutTimer.Start();
 	}
 
 	private void Fade(double delta) {
-		Sprite.Modulate = Sprite.Modulate.Lerp(to: Colors.Transparent, weight: (float)(delta / _fadeOutTimer.WaitTime));
+		if (!_fadeOutTimer.IsStopped()) {
+			Sprite.Modulate = Sprite.Modulate.Lerp(to: Colors.Transparent, weight: (float)(delta / _fadeOutTimer.WaitTime));
+		}
 	}
 
 	public void OnFadeOut() => QueueFree();
-
-	private Character? LookForNextTarget() {
-		if (_charactersInAttackRange.FirstOrDefault() is Character targetInAttackRange) {
-			InAttackRange = true;
-			return targetInAttackRange;
-		}
-
-		if (_charactersInDetectionRange.FirstOrDefault() is Character targetInDetectionRange) {
-			InDetectionRange = true;
-			return targetInDetectionRange;
-		}
-
-		
-		InDetectionRange = false;
-		InAttackRange = false;
-		
-		return null;
-	}
-
-	public void OnBodyEnteredDetectionRange(Node2D body) {
-		if (body is not Player player) return;
-		_charactersInDetectionRange.Add(player);
-		if (_target == null) {
-			_target = player;
-			InDetectionRange = true;
-		}
-	}
-
-	public void OnBodyExitedDetectionRange(Node2D body) {
-		if (body is not Player player || !_charactersInDetectionRange.Contains(player)) return;
-		_charactersInDetectionRange.Remove(player);
-		InDetectionRange = false;
-		if (_target == player) _target = LookForNextTarget();
-	}
-
-	public void OnBodyEnteredAttackRange(Node2D body) {
-		if (body is not Player player) return;
-		if (_charactersInAttackRange.Count == 0) {
-			_target = player;
-			InAttackRange = true;
-		}
-		_charactersInAttackRange.Add(player);
-	}
-
-	public void OnBodyExitedAttackRange(Node2D body) {
-		if (body is not Player player || !_charactersInAttackRange.Contains(player)) return;
-		_charactersInAttackRange.Remove(player);
-		InAttackRange = false;
-		if (_target == player) _target = LookForNextTarget();
-	}
 }

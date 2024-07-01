@@ -25,9 +25,9 @@ public partial class WheelBot : Form {
         AttackBase.Instantiate<WheelBotShot>(parent, AttacksShouldAffectEnemies, AttacksShouldAffectPlayers, parent.Position);
     }
 
-    public override void OnAttackEnded() {
-		AttackTimer.Stop();
-		CurrentState = State.Idle;
+    public override void StopAttack() {
+        AttackDelayTimer.Stop();
+        base.StopAttack();
     }
 
     public override void SpecialAction() {
@@ -43,10 +43,5 @@ public partial class WheelBot : Form {
         SpecialActionTimer.Start();
 
         CurrentState = State.UsingSpecialAction;
-    }
-
-    public override void OnSpecialActionEnded() {
-        SpecialActionTimer.Stop();
-        CurrentState = State.Idle;
     }
 }

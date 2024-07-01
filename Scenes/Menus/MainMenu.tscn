@@ -1,0 +1,226 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgnqxd1g7bi8u"]
+
+[ext_resource type="Texture2D" uid="uid://cv7pasu2bfp3t" path="res://Sprites/UI/Window Borders/Spores (Long).png" id="1_d74al"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/MainMenu/MainMenu.cs" id="1_rclwl"]
+[ext_resource type="FontFile" uid="uid://b4m7xqgsadxgr" path="res://Sprites/UI/Fonts/Bitfantasy.ttf" id="2_6d1su"]
+[ext_resource type="AudioStream" uid="uid://dccou0ovwohii" path="res://Audio/Music/VULTURIS.wav" id="2_gjuit"]
+[ext_resource type="Texture2D" uid="uid://f16j7tatlo7l" path="res://Sprites/UI/Window Borders/Spores (Short).png" id="3_wpq5k"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/SceneChangerButton.cs" id="5_n0swe"]
+[ext_resource type="FontFile" uid="uid://cutsgxc8mbhqp" path="res://Sprites/UI/Fonts/TinyPixie2.ttf" id="6_fcn8g"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/MainMenu/MultiplayerCheckButton.cs" id="6_sl0qd"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/FocusController.cs" id="8_0p53a"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_o36kn"]
+font = ExtResource("2_6d1su")
+font_size = 32
+font_color = Color(0.984314, 0.984314, 0.984314, 1)
+shadow_size = 2
+shadow_color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7vcaq"]
+font = ExtResource("2_6d1su")
+font_color = Color(0.984314, 0.984314, 0.984314, 1)
+shadow_color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rclwl")
+_music = ExtResource("2_gjuit")
+_musicVolume = 12.0
+
+[node name="FocusController" type="Control" parent="." node_paths=PackedStringArray("_firstFocusedNode")]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("8_0p53a")
+_firstFocusedNode = NodePath("../Buttons/ContinueButton")
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Title" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 8.0
+offset_right = 20.0
+offset_bottom = 48.0
+grow_horizontal = 2
+
+[node name="TopBorder" type="TextureRect" parent="Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -18.0
+offset_right = 48.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_d74al")
+
+[node name="BottomBorder" type="TextureRect" parent="Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = 30.0
+offset_right = 48.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_wpq5k")
+
+[node name="Title" type="Label" parent="Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -82.5
+offset_top = 4.0
+offset_right = 82.5
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Vulturis"
+label_settings = SubResource("LabelSettings_o36kn")
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Title"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -59.5
+offset_top = 28.0
+offset_right = 59.5
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Shape of Shadows"
+label_settings = SubResource("LabelSettings_7vcaq")
+
+[node name="Buttons" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ExitButton" type="Button" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -13.5
+offset_top = -12.0
+offset_right = 13.5
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_top = NodePath("../SettingsButton")
+text = "Exit"
+flat = true
+
+[node name="SettingsButton" type="Button" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -26.0
+offset_right = 25.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_top = NodePath("../NewGameButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+text = "Settings"
+flat = true
+script = ExtResource("5_n0swe")
+_scenePath = "res://Scenes/Menus/Settings.tscn"
+
+[node name="NewGameButton" type="Button" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -40.0
+offset_right = 30.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_top = NodePath("../ContinueButton")
+focus_neighbor_bottom = NodePath("../SettingsButton")
+text = "New Game"
+flat = true
+
+[node name="ContinueButton" type="Button" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.5
+offset_top = -54.0
+offset_right = 25.5
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_bottom = NodePath("../NewGameButton")
+text = "Continue"
+flat = true
+
+[node name="MultiplayerCheckButton" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 156.0
+offset_right = 320.0
+offset_bottom = 180.0
+theme_override_fonts/font = ExtResource("6_fcn8g")
+theme_override_font_sizes/font_size = 6
+text = "Multiplayer"
+script = ExtResource("6_sl0qd")
+
+[connection signal="pressed" from="Buttons/ExitButton" to="." method="OnExitButtonPressed"]
+[connection signal="pressed" from="Buttons/SettingsButton" to="Buttons/SettingsButton" method="OnPressed"]
+[connection signal="pressed" from="Buttons/NewGameButton" to="." method="OnNewGameButtonPressed"]
+[connection signal="pressed" from="Buttons/ContinueButton" to="." method="OnContinueButtonPressed"]
+[connection signal="toggled" from="MultiplayerCheckButton" to="MultiplayerCheckButton" method="OnToggled"]

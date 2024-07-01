@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://3jhl3ny8dugw"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Characters/Attacks/AttackBase.tscn" id="1_5hdf1"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Assasin/AssassinSlashOne.cs" id="2_bmng5"]
+[ext_resource type="Texture2D" uid="uid://dxxlqyxjpg553" path="res://Sprites/Forms/Assassin/Attacks/VFX for attack 1.png" id="2_wnbkj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hqh0"]
+atlas = ExtResource("2_wnbkj")
+region = Rect2(0, 0, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_afubn"]
+atlas = ExtResource("2_wnbkj")
+region = Rect2(0, 19, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yuya6"]
+atlas = ExtResource("2_wnbkj")
+region = Rect2(0, 38, 19, 19)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5hc5y"]
+atlas = ExtResource("2_wnbkj")
+region = Rect2(0, 57, 19, 19)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ldm7k"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1hqh0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_afubn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yuya6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5hc5y")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l6oxj"]
+size = Vector2(19, 14)
+
+[node name="AssassinSlashOne" instance=ExtResource("1_5hdf1")]
+position = Vector2(7, 7)
+script = ExtResource("2_bmng5")
+Damage = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_ldm7k")
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("RectangleShape2D_l6oxj")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.5

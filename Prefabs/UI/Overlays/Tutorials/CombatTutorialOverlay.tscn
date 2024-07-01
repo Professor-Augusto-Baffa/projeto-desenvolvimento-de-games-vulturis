@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw1l8t15bo70t"]
+
+[ext_resource type="PackedScene" uid="uid://bnjxqr2slugll" path="res://Prefabs/UI/Overlays/TutorialOverlay.tscn" id="1_1wk81"]
+
+[node name="CombatTutorialOverlay" instance=ExtResource("1_1wk81")]
+
+[node name="RichTextLabel" parent="PopUp/Border" index="1"]
+text = "Monsters may attack you, be careful!
+
+Each form has different attacks and abilities. Flowers attack using spores.
+
+Player 1: X
+Player 2: , (comma)
+Controller: Left action button (X)
+
+You can also dodge backward to avoid attacks. This action will grant you temporary invincibility, but stop your current attack.
+
+Player 1: Q
+Player 2: U
+Controller: Left Shoulder Button (LB)"
+
+[node name="Label" parent="PopUp/TitleBoder" index="1"]
+text = "Combat"

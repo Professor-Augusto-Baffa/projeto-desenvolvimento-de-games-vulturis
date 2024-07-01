@@ -6,7 +6,7 @@ namespace Forms;
 
 public partial class ShotgunnerBot : Form {
     public override void Attack() {
-        AttackBase.Instantiate<ShotgunnerBotBashOne>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+        CurrentAttack = AttackBase.Instantiate<ShotgunnerBotBashOne>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
         Sprite.Play("attack");
 
         AttackTimer.WaitTime = Attacks[0].Duration + Attacks[0].StartingDelay;
@@ -17,12 +17,13 @@ public partial class ShotgunnerBot : Form {
         CurrentState = State.Attacking;
     }
 
-    public override void OnAttackEnded() {
-        CurrentState = State.Idle;
+    public void OnAttackDelayEnded() {
+        CurrentAttack = AttackBase.Instantiate<ShotgunnerBotBashTwo>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
     }
 
-    public void OnAttackDelayEnded() {
-        AttackBase.Instantiate<ShotgunnerBotBashTwo>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+    public override void StopAttack() {
+        AttackDelayTimer.Stop();
+        base.StopAttack();
     }
 
     public override void SpecialAction() {
@@ -33,9 +34,5 @@ public partial class ShotgunnerBot : Form {
         SpecialActionTimer.Start();
 
         CurrentState = State.UsingSpecialAction;
-    }
-
-    public override void OnSpecialActionEnded() {
-        CurrentState = State.Idle;
     }
 }

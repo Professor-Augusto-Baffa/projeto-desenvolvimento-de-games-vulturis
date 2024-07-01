@@ -20,26 +20,34 @@ public abstract partial class AttackBase : Area2D {
 	[Export]
 	protected int Damage { get; private set; }
 
-    private Vector2 Offset => new(x: Sprite.FlipH ? -Position.X : Position.X, Position.Y);
+    private Vector2 Offset => new(
+		x: Sprite.FlipH ? -Position.X : Position.X,
+		y: Position.Y
+	);
 
+	private const string _attackPath = "res://Prefabs/Characters/Attacks/";
 	private static readonly Dictionary<Type, PackedScene> _prefabs = new() {
-		{ typeof(AssassinCrossSlice), GD.Load<PackedScene>("res://Prefabs/Attacks/Assassin/AssassinCrossSlice.tscn") },
-		{ typeof(AssassinSlashOne), GD.Load<PackedScene>("res://Prefabs/Attacks/Assassin/AssassinSlashOne.tscn") },
-		{ typeof(AssassinSlashTwo), GD.Load<PackedScene>("res://Prefabs/Attacks/Assassin/AssassinSlashTwo.tscn") },
-		{ typeof(AssassinSweep), GD.Load<PackedScene>("res://Prefabs/Attacks/Assassin/AssassinSweep.tscn") },
-		{ typeof(BlindingSpiderBlind), GD.Load<PackedScene>("res://Prefabs/Attacks/Blinding Spider/BlindingSpiderBlind.tscn") },
-		{ typeof(FlowerSpores), GD.Load<PackedScene>("res://Prefabs/Attacks/Flower/FlowerSpores.tscn") },
-		{ typeof(ShotgunnerBotBashOne), GD.Load<PackedScene>("res://Prefabs/Attacks/Shotgunner Bot/ShotgunnerBotBashOne.tscn") },
-		{ typeof(ShotgunnerBotBashTwo), GD.Load<PackedScene>("res://Prefabs/Attacks/Shotgunner Bot/ShotgunnerBotBashTwo.tscn") },
-		{ typeof(ShotgunnerBotShot), GD.Load<PackedScene>("res://Prefabs/Attacks/Shotgunner Bot/ShotgunnerBotShot.tscn") },
-		{ typeof(WheelBotFireDash), GD.Load<PackedScene>("res://Prefabs/Attacks/Wheel Bot/WheelBotFireDash.tscn") },
-		{ typeof(WheelBotShot), GD.Load<PackedScene>("res://Prefabs/Attacks/Wheel Bot/WheelBotShot.tscn") },
+		{ typeof(AssassinCrossSlice), GD.Load<PackedScene>(_attackPath + "Assassin/AssassinCrossSlice.tscn") },
+		{ typeof(AssassinSlashOne), GD.Load<PackedScene>(_attackPath + "Assassin/AssassinSlashOne.tscn") },
+		{ typeof(AssassinSlashTwo), GD.Load<PackedScene>(_attackPath + "Assassin/AssassinSlashTwo.tscn") },
+		{ typeof(AssassinSweep), GD.Load<PackedScene>(_attackPath + "Assassin/AssassinSweep.tscn") },
+		{ typeof(BlindingSpiderBlind), GD.Load<PackedScene>(_attackPath + "Blinding Spider/BlindingSpiderBlind.tscn") },
+		{ typeof(FlowerSpores), GD.Load<PackedScene>(_attackPath + "Flower/FlowerSpores.tscn") },
+		{ typeof(ShockSweeperSlam), GD.Load<PackedScene>(_attackPath + "Shock Sweeper/ShockSweeperSlam.tscn") },
+		{ typeof(ShockSweeperSpinSlam), GD.Load<PackedScene>(_attackPath + "Shock Sweeper/ShockSweeperSpinSlam.tscn") },
+		{ typeof(ShockSweeperSweep), GD.Load<PackedScene>(_attackPath + "Shock Sweeper/ShockSweeperSweep.tscn") },
+		{ typeof(ShotgunnerBotBashOne), GD.Load<PackedScene>(_attackPath + "Shotgunner Bot/ShotgunnerBotBashOne.tscn") },
+		{ typeof(ShotgunnerBotBashTwo), GD.Load<PackedScene>(_attackPath + "Shotgunner Bot/ShotgunnerBotBashTwo.tscn") },
+		{ typeof(ShotgunnerBotShot), GD.Load<PackedScene>(_attackPath + "Shotgunner Bot/ShotgunnerBotShot.tscn") },
+		{ typeof(WheelBotFireDash), GD.Load<PackedScene>(_attackPath + "Wheel Bot/WheelBotFireDash.tscn") },
+		{ typeof(WheelBotShot), GD.Load<PackedScene>(_attackPath + "Wheel Bot/WheelBotShot.tscn") },
 	};
 
 	private const int _playerLayerNumber = 2;
 	private const int _enemyLayerNumber = 3;
 
-	public void OnTimerTimeout() => QueueFree();
+	public void OnAnimationFinished() => QueueFree();
+	public void OnTimerTimeout() => SetCollisionMask(false, false);
 
 	#nullable enable
 	/// <summary>
@@ -85,7 +93,13 @@ public abstract partial class AttackBase : Area2D {
 
 	public virtual void OnCharacterEntered(Node2D node) {
 		if (node == AttackUser || (node is Character character && character.IsInvincible)) return;
-		if (node is Player player) player.TakeDamage(Damage);
-		if (node is Enemy enemy) enemy.TakeDamage(Damage, Sprite.FlipH);
+
+		if (node is Player player) {
+			player.TakeDamage(Damage);
+			SetCollisionMask(false, false);
+		} else if (node is Enemy enemy) {
+			enemy.TakeDamage(Damage, Sprite.FlipH);
+			SetCollisionMask(false, false);
+		}
 	}
 }

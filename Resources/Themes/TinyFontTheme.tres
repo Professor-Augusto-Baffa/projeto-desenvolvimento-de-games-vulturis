@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c1qvrddia7qy5"]
+
+[ext_resource type="FontFile" uid="uid://cutsgxc8mbhqp" path="res://Sprites/UI/Fonts/TinyPixie2.ttf" id="1_prqti"]
+
+[resource]
+default_font = ExtResource("1_prqti")
+default_font_size = 6

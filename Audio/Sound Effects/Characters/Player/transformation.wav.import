@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bo2dsqkwlhjma"
+path="res://.godot/imported/transformation.wav-60848136867dcbce5a3969b7a8875681.sample"
+
+[deps]
+
+source_file="res://Audio/Sound Effects/Characters/Player/transformation.wav"
+dest_files=["res://.godot/imported/transformation.wav-60848136867dcbce5a3969b7a8875681.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

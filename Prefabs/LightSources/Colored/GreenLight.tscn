@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd244vtjokh40"]
+
+[ext_resource type="PackedScene" uid="uid://hdoelxe866l2" path="res://Prefabs/LightSources/Light.tscn" id="1_8ggrw"]
+
+[node name="Light" instance=ExtResource("1_8ggrw")]
+color = Color(0.678431, 0.737255, 0.270588, 1)

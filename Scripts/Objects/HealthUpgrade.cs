@@ -11,12 +11,24 @@ public partial class HealthUpgrade : Area2D {
 		}
 	}
 
-	public void OnBodyEntered(Node body) {
+	public async void OnBodyEntered(Node body) {
 		if (body is not Player) return;
 		BaseScene.ProgressionController.HealthUpgradesCollected.Add(GetParent().Name);
 		foreach (Player player in BaseScene.Players) {
 			player.Heal();
 		}
+
+		// Temporarilty disable this node to play the sound effect, before destroying it
+		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Visible = false;
+		CollisionMask = 0;
+
+		await PlaySoundEffect();
 		QueueFree();
+	}
+
+	private SignalAwaiter PlaySoundEffect() {
+		AudioStreamPlayer2D audioPlayer = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+		audioPlayer.Play();
+		return ToSignal(source: audioPlayer, signal: AudioStreamPlayer2D.SignalName.Finished);
 	}
 }

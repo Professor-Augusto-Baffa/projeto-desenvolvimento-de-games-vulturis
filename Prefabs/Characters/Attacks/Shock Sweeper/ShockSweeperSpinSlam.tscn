@@ -1,0 +1,65 @@
+[gd_scene load_steps=11 format=3 uid="uid://lud8luc58cgq"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Characters/Attacks/AttackBase.tscn" id="1_ijc5q"]
+[ext_resource type="Texture2D" uid="uid://bg3qn5q1l03fa" path="res://Sprites/Forms/Shock Sweeper/Attacks/VFX for Spin Slam.png" id="2_2dmij"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Shock Sweeper/ShockSweeperSpinSlam.cs" id="2_y71h1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6y2nq"]
+atlas = ExtResource("2_2dmij")
+region = Rect2(0, 0, 51, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_toxt4"]
+atlas = ExtResource("2_2dmij")
+region = Rect2(0, 30, 51, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tde3h"]
+atlas = ExtResource("2_2dmij")
+region = Rect2(0, 60, 51, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_li2ha"]
+atlas = ExtResource("2_2dmij")
+region = Rect2(0, 90, 51, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eal1s"]
+atlas = ExtResource("2_2dmij")
+region = Rect2(0, 120, 51, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0icfn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6y2nq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_toxt4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tde3h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_li2ha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eal1s")
+}],
+"loop": false,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pluhl"]
+size = Vector2(42, 30)
+
+[node name="ShockSweeperSpinSlam" instance=ExtResource("1_ijc5q")]
+script = ExtResource("2_y71h1")
+_paralizeDuration = 0.5
+Damage = 2
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_0icfn")
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("RectangleShape2D_pluhl")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.5

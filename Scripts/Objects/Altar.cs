@@ -15,6 +15,9 @@ public partial class Altar : Area2D {
 	[Export]
 	private Color _colorAfterUnlock = Colors.White;
 
+	[Signal]
+	public delegate void FormUnlockedEventHandler();
+
 	public bool WasUsed { get; private set; } = false;
 
 	public override void _Ready() {
@@ -35,6 +38,8 @@ public partial class Altar : Area2D {
 		if (!BaseScene.ProgressionController.IsFormUnlocked(_form.FormName)) {
 			BaseScene.ProgressionController.FormsUnlocked.Add(_form.FormName);
 		}
+
+		GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D").Play();
 		_sprite.Play("use");
 		_formSprite.Modulate = _colorAfterUnlock;
 		WasUsed = true;
@@ -44,5 +49,7 @@ public partial class Altar : Area2D {
 			form.GetNode<AnimatedSprite2D>("AnimatedSprite2D").Modulate = Colors.White;
 			player.StartTranformation(form);
 		}
+
+		EmitSignal(SignalName.FormUnlocked);
 	}
 }

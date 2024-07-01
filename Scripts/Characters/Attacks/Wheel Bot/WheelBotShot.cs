@@ -1,9 +1,8 @@
 using Godot;
-using Objects;
 
 namespace Attacks.WheelBot;
 
-public partial class WheelBotShot : AttackBase {
+public partial class WheelBotShot : DoorOpeningAttack {
     [Export]
     private float _speed;
     private int _direction;
@@ -24,10 +23,6 @@ public partial class WheelBotShot : AttackBase {
 
     public override void OnCharacterEntered(Node2D node) {
         base.OnCharacterEntered(node);
-        if (node is Door door) {
-            if (door.IsOpen) return;
-            door.Open();
-        }
         OnDurationEnded();
     }
 }

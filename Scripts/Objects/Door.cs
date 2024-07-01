@@ -10,6 +10,7 @@ public partial class Door : StaticBody2D {
 
 	public async void Open() {
 		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Play();
+		GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D").Play();
 		IsOpen = true;
 
 		await ToSignal(

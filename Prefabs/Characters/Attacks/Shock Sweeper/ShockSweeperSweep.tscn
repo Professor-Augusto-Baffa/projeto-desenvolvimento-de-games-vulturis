@@ -1,0 +1,60 @@
+[gd_scene load_steps=10 format=3 uid="uid://cdrhjfbm0njye"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Characters/Attacks/AttackBase.tscn" id="1_8k85x"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Shock Sweeper/ShockSweeperSweep.cs" id="2_54bjr"]
+[ext_resource type="Texture2D" uid="uid://bwtgymbbjtupj" path="res://Sprites/Forms/Shock Sweeper/Attacks/VFX for Sweep.png" id="3_mkbn1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kflu5"]
+atlas = ExtResource("3_mkbn1")
+region = Rect2(0, 0, 88, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbi88"]
+atlas = ExtResource("3_mkbn1")
+region = Rect2(0, 36, 88, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1c3w"]
+atlas = ExtResource("3_mkbn1")
+region = Rect2(0, 72, 88, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fq76k"]
+atlas = ExtResource("3_mkbn1")
+region = Rect2(0, 108, 88, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1rv5r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kflu5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbi88")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1c3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fq76k")
+}],
+"loop": false,
+"name": &"default",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4tilb"]
+size = Vector2(70, 20)
+
+[node name="ShockSweeperSweep" instance=ExtResource("1_8k85x")]
+position = Vector2(35, 11)
+script = ExtResource("2_54bjr")
+_paralizeDuration = 0.5
+Damage = 2
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+position = Vector2(-7, -7)
+sprite_frames = SubResource("SpriteFrames_1rv5r")
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("RectangleShape2D_4tilb")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.6

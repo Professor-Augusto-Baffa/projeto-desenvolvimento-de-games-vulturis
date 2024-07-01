@@ -7,6 +7,9 @@ using SaveSystem;
 using SceneController;
 using Objects;
 using Enemies;
+using UI;
+using Menus.MainMenu;
+using Menus.Settings;
 
 namespace Players;
 
@@ -39,8 +42,6 @@ public partial class Player : Character {
 		}
 	}
 
-	public string CurrentFormName => Form.FormName;
-
 	[Export]
 	private float _dodgeSpeed;
 
@@ -48,16 +49,21 @@ public partial class Player : Character {
 	private float _jumpCoyoteTimeDuration;
 
 	[Export]
-	private bool _friendlyFire = false;
+	private float _damageParalizeDuration;
 
 	[Export]
-	private float _damageParalizeDuration;
+	private Color _colorDuringHealing;
 
 	[ExportGroup("Camera shake after damage")]
 	[Export]
 	private float _shakeIntensity;
 	[Export]
 	private float _shakeDuration;
+
+	[ExportGroup("Sound Effects")]
+	[Export] private AudioStream _dodgeSound;
+	[Export] private AudioStream _transformationSound;
+	[Export] private AudioStream _healSound;
 
 	[Signal]
 	public delegate void HealthChangedEventHandler(int currentHealth, int maxHealth);
@@ -72,11 +78,13 @@ public partial class Player : Character {
 	private bool _isJumping = false;
 
 	#nullable enable
-	private Form? _nextForm;
+	public Form? NextForm { private get; set; }
 	private Player? _playerBeingHealed;
 
 	private enum State { Default, Dodging, Paralyzed, Transforming, HealingPlayer, Defeated }
 	private State _currentState = State.Default;
+
+	public bool IsAttacking => Form.CurrentState == Form.State.Attacking;
 
 	private bool CanStartAnotherAction => _currentState == State.Default && Form.CurrentState == Form.State.Idle;
 
@@ -86,7 +94,7 @@ public partial class Player : Character {
 	public bool CanUseSpecialAction {
 		get => _currentState == State.Default && Form.CanUseSpecialAction && FormStats.SpecialActionAmmoCost <= Ammo;
 	}
-	public bool CanDodge => CanStartAnotherAction && IsOnFloor();
+	public bool CanDodge => _currentState == State.Default && Form.CurrentState != Form.State.UsingSpecialAction && IsOnFloor() ;
 	public bool CanInteract => CanStartAnotherAction && IsOnFloor();
 
 	public override void _Ready() {
@@ -108,14 +116,20 @@ public partial class Player : Character {
 	}
 
     public override void _PhysicsProcess(double delta) {
-		if (Form.CurrentState != Form.State.Attacking && HorizontalDirection != 0) {
+		// Update player's direction
+		if (!IsAttacking && HorizontalDirection != 0) {
 			Sprite.FlipH = HorizontalDirection < 0;
 		}
 
 		if (CanMove) {
-			if (CanStartAnotherAction && IsOnFloor() && FormStats.Jump != FormStats.JumpHeight.NoJump) {
+			// Landing after jump
+			if (!CanJump && CanStartAnotherAction && IsOnFloor() && FormStats.Jump != FormStats.JumpHeight.NoJump) {
+				SoundEffectsPlayer.Stream = LandingSound;
+				SoundEffectsPlayer.Play();
 				CanJump = true;
 			}
+
+			// Enable coyote time
 			if (CanJump && !_isJumping && !IsOnFloor()) {
 				StartCoyoteTime();
 			}
@@ -144,29 +158,7 @@ public partial class Player : Character {
 		Sprite.Play(animation);
 	}
 
-	public void TakeDamage(int damage, bool shouldParalize = true, float? frameFreezeDuration = null) {
-		Health -= damage;
-		EmitSignal(SignalName.HealthChanged, Health, MaxHealth);
-		if (_currentState == State.Transforming) StopTransforming();
-		if (_currentState == State.HealingPlayer) StopHealingPlayer();
-
-		if (Health <= 0) {
-			StopMoving();
-			StringName animation = AnimationNames.Contains("stun") ? "stun" : "death";
-			Sprite.Play(animation);
-			// TODO add player death signal
-			_currentState = State.Defeated;
-		} else {
-			Sprite.Stop();
-			Sprite.Play("hit");
-			_invincibilityAfterDamageTimer.Start();
-			if (shouldParalize) StartParalyze(_damageParalizeDuration);
-		}
-
-		BaseScene.Camera.StartShake(_shakeIntensity, _shakeDuration);
-		FrameFreeze(frameFreezeDuration);
-	}
-
+	/// <summary> Heals the player by a fixed amount. If no healthHealed argument is passed, the player health will be restored to full. /// </summary>
 	public void Heal(int? healthHealed = null) {
 		healthHealed ??= MaxHealth;
 		Health += healthHealed.Value;
@@ -174,14 +166,65 @@ public partial class Player : Character {
 		EmitSignal(SignalName.HealthChanged, Health, MaxHealth);
 	}
 
+	/// <summary> Adds a fixed amount of ammo to the player. If no ammo argument is passed, the player will restore all ammo. </summary>
+	public void AddAmmo(int? amount = null) {
+		Ammo += amount ?? MaxAmmo;
+	}
+
 	public void RestoreAmmo() {
 		Ammo++;
 		if (Ammo >= MaxAmmo) _ammoRecoveryTimer.Stop();
 	}
 
+	public void TakeDamage(int damage, bool shouldParalize = true, float? frameFreezeDuration = null) {
+		Health -= damage;
+		EmitSignal(SignalName.HealthChanged, Health, MaxHealth);
+		if (_currentState == State.Transforming) StopTransforming();
+		if (_currentState == State.HealingPlayer) StopHealingPlayer();
+
+		Form.StopAttack();
+
+		if (Health <= 0) {
+			OnDefeated();
+		} else {
+			Sprite.Stop();
+			Sprite.Play("hit");
+			if (Form.DamageSound != null) {
+				SoundEffectsPlayer.Stream = Form.DamageSound;
+				SoundEffectsPlayer.Play();
+			}
+
+			_invincibilityAfterDamageTimer.Start();
+			if (shouldParalize) StartParalyze(_damageParalizeDuration);
+		}
+
+		BaseScene.Camera.StartShake(_shakeIntensity, _shakeDuration);
+		if (Settings.HitStopEnabled)  FrameFreeze(frameFreezeDuration);
+	}
+
+	private async void OnDefeated() {
+		_currentState = State.Defeated;
+		StopMoving();
+
+		StringName animation = AnimationNames.Contains("stun") ? "stun" : "death";
+		Sprite.Play(animation);
+		if (Form.DeathSound != null) {
+			SoundEffectsPlayer.Stream = Form.DeathSound;
+			SoundEffectsPlayer.Play();
+		}
+
+		if (BaseScene.Players.All((player) => player.IsDefeated)) {
+			Sprite.Play("death");
+			await ToSignal(source: Sprite, signal: AnimatedSprite2D.SignalName.AnimationFinished);
+			await SceneTransition.FadeIn();
+
+			MainMenu.StartGame(rootNode: GetParent());
+		}
+	}
+
     private void Move(double delta) {
 		float xVelocity = HorizontalDirection * FormStats.Speed;
-		if (Form.CurrentState == Form.State.Attacking) xVelocity /= 3;
+		if (IsAttacking) xVelocity /= 3;
 
 		float yVelocity;
 		if (_isJumping) {
@@ -206,9 +249,13 @@ public partial class Player : Character {
 
 	public void Jump() {
 		_isJumping = true;
+
 		if (JumpDuration <= 0) return; // necessary in order to avoid timer errors
         _jumpTimer.WaitTime = JumpDuration;
 		_jumpTimer.Start();
+
+		SoundEffectsPlayer.Stream = JumpSound;
+		SoundEffectsPlayer.Play();
 	}
 
 	public void StopJumping() {
@@ -227,9 +274,13 @@ public partial class Player : Character {
 
 	public void StartDodge() {
 		_dodgeTimer.Start();
+		Form.StopAttack();
 
 		StringName animation = AnimationNames.Contains("dodge") ? "dodge" : "idle";
 		Sprite.Play(animation);
+
+		SoundEffectsPlayer.Stream = _dodgeSound;
+		SoundEffectsPlayer.Play();
 
 		_currentState = State.Dodging;
 	}
@@ -264,8 +315,13 @@ public partial class Player : Character {
 		Form.SpecialAction();
 	}
 
-	public override void StartParalyze(float paralyzeDuration) {
+	public override void StartParalyze(float paralyzeDuration, bool shouldApplyEffects = false) {
 		StopMoving();
+		if (shouldApplyEffects) {
+			Sprite.Modulate = ParalyzeColor;
+			SoundEffectsPlayer.Stream = ParalyzeSound;
+			SoundEffectsPlayer.Play();
+		}
 		_currentState = State.Paralyzed;
 		_paralyzeTimer.WaitTime = paralyzeDuration;
 		_paralyzeTimer.Start();
@@ -273,7 +329,84 @@ public partial class Player : Character {
 
 	public void StopParalyze() {
 		_paralyzeTimer.Stop();
+		Sprite.Modulate = Colors.White;
 		_currentState = State.Default;
+	}
+
+	private void StartHealing(Player player) {
+		_playerBeingHealed = player;
+		StopMoving();
+		Sprite.Play("idle");
+		_playerBeingHealed.Sprite.Modulate = _colorDuringHealing;
+		_playerHealingTimer.Start();
+		_currentState = State.HealingPlayer;
+	}
+
+	public void HealPlayer() {
+		if (_playerBeingHealed == null) return;
+		_playerBeingHealed.Heal(MaxHealth);
+
+		_playerBeingHealed.SoundEffectsPlayer.Stream = _healSound;
+		_playerBeingHealed.SoundEffectsPlayer.Play();
+
+		_playerBeingHealed._currentState = State.Default;
+		StopHealingPlayer();
+	}
+
+	private void StopHealingPlayer() {
+		if (_playerBeingHealed == null) return; 
+		_playerHealingTimer.Stop();
+		_playerBeingHealed.Sprite.Modulate = Colors.White;
+		_playerBeingHealed = null;
+		_currentState = State.Default;
+	}
+
+	public void StartTranformation(Form form) {
+		NextForm = form;
+		StopMoving();
+		Sprite.Play("death");
+
+		SoundEffectsPlayer.Stream = _transformationSound;
+		SoundEffectsPlayer.Play();
+
+		_transformationTimer.Start();
+		_currentState = State.Transforming;
+	}
+
+	public void UpdateForm() {
+		// Remove previous Form if there was one
+		if (NextForm != null) {
+			Form.QueueFree();
+
+			if (NextForm.GetParent() is Enemy enemy) {
+				this.Position = enemy.Position;
+				enemy.QueueFree();
+				enemy.RemoveChild(NextForm);
+			}
+
+			AddChild(NextForm);
+			base.Form = NextForm;
+			NextForm = null;
+		}
+
+		Heal();
+		Ammo = MaxAmmo;
+		AnimationNames = Sprite.SpriteFrames.GetAnimationNames();
+		_shape.Shape = FormStats.CollisonShape;
+		Form.UpdateAttackCollisions(
+			shouldAffectEnemies: true,
+			shouldAffectPlayers: Settings.FriendlyFireEnabled
+		);
+		StopTransforming();
+	}
+
+	private void StopTransforming() {
+		_transformationTimer.Stop();
+		_currentState = State.Default;
+
+		if (NextForm == null || NextForm.GetParent() is not Enemy enemy) return;
+		enemy.IsBeeingUsedInTransformation = false;
+		NextForm = null;
 	}
 
 	public void LookForInteractions() {
@@ -286,69 +419,10 @@ public partial class Player : Character {
 		} else if (LookForStunnedEnemy() is Enemy enemy) {
 			enemy.IsBeeingUsedInTransformation = true;
 			StartTranformation(enemy.Form);
+
+		} else if (LookForPanel() is Objects.Panel panel) {
+			panel.Save();
 		}
-	}
-
-	private void StartHealing(Player player) {
-		_playerBeingHealed = player;
-		StopMoving();
-		Sprite.Play("idle");
-		_playerHealingTimer.Start();
-		_currentState = State.HealingPlayer;
-	}
-
-	public void HealPlayer() {
-		if (_playerBeingHealed == null) return;
-		_playerBeingHealed.Heal(MaxHealth);
-		_playerBeingHealed._currentState = State.Default;
-		StopHealingPlayer();
-	}
-
-	private void StopHealingPlayer() {
-		_playerHealingTimer.Stop();
-		_playerBeingHealed = null;
-		_currentState = State.Default;
-	}
-
-	public void StartTranformation(Form form) {
-		_nextForm = form;
-		StopMoving();
-		Sprite.Play("death");
-		_transformationTimer.Start();
-		_currentState = State.Transforming;
-	}
-
-	public void UpdateForm() {
-		// Remove previous Form if there was one
-		if (_nextForm != null) {
-			Form.QueueFree();
-
-			if (_nextForm.GetParent() is Enemy enemy) {
-				this.Position = enemy.Position;
-				enemy.QueueFree();
-				enemy.RemoveChild(_nextForm);
-			}
-
-			AddChild(_nextForm);
-			Form = _nextForm;
-			_nextForm = null;
-		}
-
-		Heal();
-		Ammo = FormStats.MaxAmmo;
-		AnimationNames = Sprite.SpriteFrames.GetAnimationNames();
-		_shape.Shape = FormStats.CollisonShape;
-		Form.UpdateAttackCollisions(shouldAffectEnemies: true, shouldAffectPlayers: _friendlyFire);
-		StopTransforming();
-	}
-
-	private void StopTransforming() {
-		_transformationTimer.Stop();
-		_currentState = State.Default;
-
-		if (_nextForm == null || _nextForm.GetParent() is not Enemy enemy) return;
-		enemy.IsBeeingUsedInTransformation = false;
-		_nextForm = null;
 	}
 
 	private Player? LookForDefeatedPlayers() {
@@ -390,6 +464,14 @@ public partial class Player : Character {
 		Array<Area2D> areas = _interactionRange.GetOverlappingAreas();
 		Altar? area = (Altar?) areas.FirstOrDefault(
 			predicate: (area) => area is Altar altar && !altar.WasUsed
+		);
+		return area;
+	}
+
+	private Objects.Panel? LookForPanel() {
+		Array<Area2D> areas = _interactionRange.GetOverlappingAreas();
+		Objects.Panel? area = (Objects.Panel?) areas.FirstOrDefault(
+			predicate: (area) => area is Objects.Panel panel && !panel.IsBeingUsed
 		);
 		return area;
 	}

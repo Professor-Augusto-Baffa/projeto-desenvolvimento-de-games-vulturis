@@ -1,0 +1,45 @@
+[gd_scene load_steps=12 format=3 uid="uid://b4c0r6du73i4a"]
+
+[ext_resource type="PackedScene" uid="uid://csvgdw17ei3mt" path="res://Prefabs/Characters/Forms/Form.tscn" id="1_u2rur"]
+[ext_resource type="Script" path="res://Scripts/Characters/Forms/BlindingSpider.cs" id="2_6y5ke"]
+[ext_resource type="SpriteFrames" uid="uid://bqxpa42a07xtl" path="res://Resources/Sprite Frames/Blinding Spider Sprite Frames.tres" id="2_hdvho"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/AttackStats.cs" id="3_7mt80"]
+[ext_resource type="Shape2D" uid="uid://bfssojut3652r" path="res://Resources/Collision Shapes/Blinding Spider Collision Shape.tres" id="4_3dyga"]
+[ext_resource type="Script" path="res://Scripts/Characters/Forms/FormStats.cs" id="5_8kw1p"]
+[ext_resource type="AudioStream" uid="uid://c51abj7im0c3l" path="res://Audio/Sound Effects/Characters/Forms/Blinding Spider/blinding spider dmg.wav" id="6_e4gc6"]
+[ext_resource type="AudioStream" uid="uid://k1s77dkj5ias" path="res://Audio/Sound Effects/Characters/Forms/Blinding Spider/blinding spider death.wav" id="7_qf8u1"]
+
+[sub_resource type="Resource" id="Resource_42ejj"]
+script = ExtResource("3_7mt80")
+Duration = 1.0
+StartingDelay = 0.3
+
+[sub_resource type="Resource" id="Resource_xefif"]
+script = ExtResource("5_8kw1p")
+CollisonShape = ExtResource("4_3dyga")
+MaxHealth = 3
+MaxAmmo = 0
+StunChance = 40
+Speed = 90.0
+Jump = 1
+Attacks = [SubResource("Resource_42ejj")]
+SpecialActionDuration = 0.0
+SpecialActionAmmoCost = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6hj4o"]
+resource_local_to_scene = true
+
+[node name="Form" instance=ExtResource("1_u2rur")]
+script = ExtResource("2_6y5ke")
+FormStats = SubResource("Resource_xefif")
+DamageSound = ExtResource("6_e4gc6")
+DeathSound = ExtResource("7_qf8u1")
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+material = SubResource("ShaderMaterial_6hj4o")
+position = Vector2(0, -2)
+sprite_frames = ExtResource("2_hdvho")
+animation = &"idle"
+
+[connection signal="timeout" from="AttackTimer" to="." method="OnAttackEnded"]
+[connection signal="timeout" from="AttackDelayTimer" to="." method="OnAttackDelayEnded"]

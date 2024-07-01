@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b2ywdrev3k354"
+path="res://.godot/imported/shogunner bot shot.wav-7b67307eff0ba2cd4fe402fd662c1c9c.sample"
+
+[deps]
+
+source_file="res://Audio/Sound Effects/Characters/Forms/Shotgunner Bot/shogunner bot shot.wav"
+dest_files=["res://.godot/imported/shogunner bot shot.wav-7b67307eff0ba2cd4fe402fd662c1c9c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

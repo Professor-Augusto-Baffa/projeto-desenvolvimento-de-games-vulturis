@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dhc5hp82t8f5n"]
+[gd_scene load_steps=6 format=3 uid="uid://dhc5hp82t8f5n"]
 
 [ext_resource type="Script" path="res://Scripts/Objects/AmmoUpgrade.cs" id="1_nhqjg"]
 [ext_resource type="Texture2D" uid="uid://bcobgk0g0ncrh" path="res://Sprites/UI/HUD/Ammo Container.png" id="2_m2gu6"]
+[ext_resource type="AudioStream" uid="uid://b4ta3p2ham7r5" path="res://Audio/Sound Effects/Objects/upgrade.wav" id="3_gr5ud"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_x3n8s"]
 animations = [{
@@ -26,5 +27,9 @@ sprite_frames = SubResource("SpriteFrames_x3n8s")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_15gq1")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_gr5ud")
+volume_db = 12.0
 
 [connection signal="body_entered" from="." to="." method="OnBodyEntered"]

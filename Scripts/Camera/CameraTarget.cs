@@ -33,7 +33,7 @@ public partial class CameraTarget : RemoteTransform2D {
     private Vector2 GetPlayersMovementDirection() {
         float horizontalDirection = 0;
         foreach (Player player in _players) {
-            if (player.Velocity.X != 0) {
+            if (player.Velocity.X != 0 && !player.IsAttacking) {
                 horizontalDirection += player.Velocity.X;
             }
         }

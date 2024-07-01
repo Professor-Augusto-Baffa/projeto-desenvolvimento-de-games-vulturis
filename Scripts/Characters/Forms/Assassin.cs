@@ -30,7 +30,7 @@ public partial class Assassin : Form {
 
     public override void Attack() {
 		if (CurrentState == State.Idle) {
-			AttackBase.Instantiate<AssassinSlashOne>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+			CurrentAttack = AttackBase.Instantiate<AssassinSlashOne>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
 			Sprite.Play("attack");
 
 			AttackTimer.WaitTime = Attacks[(int) _nextAttack].Duration;
@@ -46,7 +46,7 @@ public partial class Assassin : Form {
 
     public override void OnAttackEnded() {
 		if (_shouldStartAnotherAttack && _nextAttack == AttackType.SecondSlash) {
-			AttackBase.Instantiate<AssassinSlashTwo>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+			CurrentAttack = AttackBase.Instantiate<AssassinSlashTwo>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
 			Sprite.Play("attack_2");
 
 			AttackTimer.WaitTime = Attacks[(int) _nextAttack].Duration;
@@ -55,10 +55,15 @@ public partial class Assassin : Form {
 		} else {
 			AttackTimer.Stop();
 			_nextAttack = AttackType.FirstSlash;
-			CurrentState = State.Idle;
+			base.OnAttackEnded();
 		}
 		_shouldStartAnotherAttack = false;
 	}
+
+    public override void StopAttack() {
+		_shouldStartAnotherAttack = false;
+        base.StopAttack();
+    }
 
     public override void SpecialAction() {
         SpecialActionTimer.WaitTime = FormStats.SpecialActionDuration;
@@ -81,11 +86,10 @@ public partial class Assassin : Form {
 	}
 
     public override void OnSpecialActionEnded() {
-		SpecialActionTimer.Stop();
-		CurrentState = State.Idle;
+		base.OnSpecialActionEnded();
 
 		if (_shouldStartAnotherAttack) {
-			AttackBase.Instantiate<AssassinCrossSlice>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+			CurrentAttack = AttackBase.Instantiate<AssassinCrossSlice>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
 			Sprite.Play("cross_slice");
 
 			_nextAttack = AttackType.CrossSlice;

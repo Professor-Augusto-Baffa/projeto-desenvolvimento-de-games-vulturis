@@ -16,13 +16,12 @@ public partial class BlindingSpider : Form {
     }
 
 	public void OnAttackDelayEnded() {
-		AttackDelayTimer.Stop();
-		AttackBase.Instantiate<BlindingSpiderBlind>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
+		CurrentAttack = AttackBase.Instantiate<BlindingSpiderBlind>(GetParent<Character>(), AttacksShouldAffectEnemies, AttacksShouldAffectPlayers);
 	}
 
-    public override void OnAttackEnded() {
-		AttackTimer.Stop();
-        CurrentState = State.Idle;
+    public override void StopAttack() {
+		AttackDelayTimer.Stop();
+        base.StopAttack();
     }
 
     public override void SpecialAction() { }

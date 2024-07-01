@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://47gnpb432gur"]
+
+[node name="Attack" type="Area2D"]
+editor_description = "Base for adding new attacks.
+To create a new attack, create a inherited scene from this scene, assign the attack script to this node, and add the prefab path to the _prefabs Dictionary in the AttackBase script, to instantiate it using the Instantiate helper.
+Also, don't forget to create a new Sprite Frames in the AnimatedSprite2D node, a new shape in the CollisionShape2D and modify the WaitTime in the timer according to the attack duration."
+collision_layer = 0
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+
+[node name="Timer" type="Timer" parent="."]
+editor_description = "Disables attack collisions after timeout."
+one_shot = true
+autostart = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = 12.0
+autoplay = true
+
+[connection signal="body_entered" from="." to="." method="OnCharacterEntered"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="OnAnimationFinished"]
+[connection signal="timeout" from="Timer" to="." method="OnTimerTimeout"]

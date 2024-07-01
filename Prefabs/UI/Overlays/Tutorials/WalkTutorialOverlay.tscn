@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://31v4wstax4bg"]
+
+[ext_resource type="PackedScene" uid="uid://bnjxqr2slugll" path="res://Prefabs/UI/Overlays/TutorialOverlay.tscn" id="1_sb6ff"]
+
+[node name="WalkTutorialOverlay" instance=ExtResource("1_sb6ff")]
+
+[node name="RichTextLabel" parent="PopUp/Border" index="1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -29.5
+offset_right = 65.0
+offset_bottom = 29.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "In your first form, Flower, you can walk to the left and right.
+
+Player 1: A/D
+Player 2: J/L
+Controller: d-pad, left joystick
+
+(Flowers don't jump)"
+
+[node name="Label" parent="PopUp/TitleBoder" index="1"]
+text = "Walking"

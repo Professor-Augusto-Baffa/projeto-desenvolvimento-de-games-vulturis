@@ -1,0 +1,182 @@
+[gd_scene load_steps=11 format=3 uid="uid://bl2v6hkb5s64q"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Menus/Settings/Settings.cs" id="1_pinos"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/FocusController.cs" id="1_plhgt"]
+[ext_resource type="Texture2D" uid="uid://b6py7fdpne5f6" path="res://Sprites/UI/Icons/UI - Icons16.png" id="2_no8wj"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/SceneChangerButton.cs" id="3_5e0tl"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/Settings/SettingsBackButton.cs" id="4_nw47i"]
+[ext_resource type="PackedScene" uid="uid://cyus8utcb7p4s" path="res://Prefabs/UI/Border.tscn" id="4_wi3gd"]
+[ext_resource type="Theme" uid="uid://c1qvrddia7qy5" path="res://Resources/Themes/TinyFontTheme.tres" id="5_bnv8e"]
+[ext_resource type="FontFile" uid="uid://cty80kspvuj08" path="res://Sprites/UI/Fonts/CelticTime.ttf" id="6_gljvc"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_5grva"]
+action = &"ui_cancel"
+
+[sub_resource type="Shortcut" id="Shortcut_3i7p6"]
+events = [SubResource("InputEventAction_5grva")]
+
+[node name="Settings" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pinos")
+
+[node name="FocusController" type="Control" parent="." node_paths=PackedStringArray("_firstFocusedNode")]
+anchors_preset = 0
+script = ExtResource("1_plhgt")
+_firstFocusedNode = NodePath("../SettingsBorder/FullscreenCheckButton")
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BackButton" type="TextureButton" parent="."]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+shortcut = SubResource("Shortcut_3i7p6")
+texture_normal = ExtResource("2_no8wj")
+script = ExtResource("4_nw47i")
+_scenePath = "res://Scenes/Menus/MainMenu.tscn"
+
+[node name="SettingsBorder" parent="." instance=ExtResource("4_wi3gd")]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 21.0
+offset_right = 299.0
+offset_bottom = 167.0
+theme = ExtResource("5_bnv8e")
+region_rect = Rect2(0, 0, 48, 48)
+
+[node name="HitstopCheckButton" type="CheckButton" parent="SettingsBorder"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 90.0
+offset_right = 257.0
+offset_bottom = 114.0
+focus_neighbor_top = NodePath("../ScreenShakeCheckButton")
+focus_neighbor_bottom = NodePath("../CreditsButtonBorder")
+text = "Freeze game after damage is taken or dealt"
+
+[node name="ScreenShakeCheckButton" type="CheckButton" parent="SettingsBorder"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 73.0
+offset_right = 257.0
+offset_bottom = 97.0
+focus_neighbor_top = NodePath("../FriendlyFireCheckButton")
+focus_neighbor_bottom = NodePath("../HitstopCheckButton")
+text = "Screen shake"
+
+[node name="FriendlyFireCheckButton" type="CheckButton" parent="SettingsBorder"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 56.0
+offset_right = 257.0
+offset_bottom = 80.0
+focus_neighbor_top = NodePath("../PlayerIdentifiersCheckBox")
+focus_neighbor_bottom = NodePath("../ScreenShakeCheckButton")
+text = "Friendly fire"
+
+[node name="PlayerIdentifiersCheckBox" type="CheckButton" parent="SettingsBorder"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 39.0
+offset_right = 257.0
+offset_bottom = 63.0
+focus_neighbor_top = NodePath("../FullscreenCheckButton")
+focus_neighbor_bottom = NodePath("../FriendlyFireCheckButton")
+text = "Player identifiers"
+
+[node name="FullscreenCheckButton" type="CheckButton" parent="SettingsBorder"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 22.0
+offset_right = 257.0
+offset_bottom = 46.0
+focus_neighbor_bottom = NodePath("../PlayerIdentifiersCheckBox")
+text = "Fullscreen"
+
+[node name="CreditsButtonBorder" parent="SettingsBorder" instance=ExtResource("4_wi3gd")]
+layout_mode = 0
+offset_left = 211.0
+offset_top = 122.0
+offset_right = 265.0
+offset_bottom = 154.0
+focus_neighbor_top = NodePath("../HitstopCheckButton")
+
+[node name="ColorRect" type="ColorRect" parent="SettingsBorder/CreditsButtonBorder"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 49.0
+offset_bottom = 27.0
+color = Color(0, 0, 0, 1)
+
+[node name="Button" type="Button" parent="SettingsBorder/CreditsButtonBorder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.0
+offset_top = -11.0
+offset_right = 22.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_gljvc")
+theme_override_font_sizes/font_size = 16
+text = "Credits"
+flat = true
+script = ExtResource("3_5e0tl")
+_scenePath = "res://Scenes/Menus/Credits.tscn"
+
+[node name="TitleBorder" parent="." instance=ExtResource("4_wi3gd")]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 7.0
+offset_right = 201.0
+offset_bottom = 39.0
+
+[node name="ColorRect" type="ColorRect" parent="TitleBorder"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 83.0
+offset_bottom = 27.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="TitleBorder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = -7.0
+offset_right = 21.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Settings"
+
+[connection signal="pressed" from="BackButton" to="." method="SaveSettings"]
+[connection signal="pressed" from="BackButton" to="BackButton" method="OnPressed"]
+[connection signal="toggled" from="SettingsBorder/HitstopCheckButton" to="." method="OnHitStopButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/ScreenShakeCheckButton" to="." method="OnScreenShakeButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/FriendlyFireCheckButton" to="." method="OnFriendlyFireButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/PlayerIdentifiersCheckBox" to="." method="OnPlayerIdentifiersButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/FullscreenCheckButton" to="." method="OnFullScreenButtonToggled"]
+[connection signal="pressed" from="SettingsBorder/CreditsButtonBorder/Button" to="SettingsBorder/CreditsButtonBorder/Button" method="OnPressed"]

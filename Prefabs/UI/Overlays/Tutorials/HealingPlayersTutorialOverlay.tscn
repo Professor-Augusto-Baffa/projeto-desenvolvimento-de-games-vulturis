@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp5uke61bc25u"]
+
+[ext_resource type="PackedScene" uid="uid://bnjxqr2slugll" path="res://Prefabs/UI/Overlays/TutorialOverlay.tscn" id="1_jbwcq"]
+
+[node name="HealingPlayersTutorialOverlay" instance=ExtResource("1_jbwcq")]
+
+[node name="RichTextLabel" parent="PopUp/Border" index="1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.5
+offset_top = -30.5
+offset_right = 70.5
+offset_bottom = 35.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "When playing multiplayer, whenever a player gets defeated, another player can get close and heal the defeated player. You cannot perform any other actions while healing another player.
+
+Player 1: E
+Player 2: O
+Controller: Right action button (B)"
+
+[node name="Label" parent="PopUp/TitleBoder" index="1"]
+text = "Healing Players"

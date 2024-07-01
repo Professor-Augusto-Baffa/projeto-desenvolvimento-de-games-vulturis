@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://c0orllp2toq2k"]
+
+[ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Characters/Enemies/Enemy.tscn" id="1_3fgeu"]
+[ext_resource type="PackedScene" uid="uid://cest1fg6sdgth" path="res://Prefabs/Characters/Forms/Assassin.tscn" id="2_jdaj5"]
+[ext_resource type="Shape2D" uid="uid://cbe4ro4e4bmt7" path="res://Resources/Collision Shapes/Assassin Collision Shape.tres" id="3_e1oke"]
+[ext_resource type="Shape2D" uid="uid://cwe8ni67vinqu" path="res://Resources/Detection Areas/Large Detection Area.tres" id="4_0lkky"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1dus7"]
+size = Vector2(40, 20)
+
+[node name="Assassin" instance=ExtResource("1_3fgeu")]
+
+[node name="Form" parent="." index="0" instance=ExtResource("2_jdaj5")]
+
+[node name="CollisionShape2D" parent="." index="5"]
+shape = ExtResource("3_e1oke")
+
+[node name="DetectionRange" parent="StateController" index="0"]
+position = Vector2(0, -22)
+
+[node name="CollisionShape2D" parent="StateController/DetectionRange" index="0"]
+shape = ExtResource("4_0lkky")
+
+[node name="CollisionShape2D" parent="StateController/AttackRange" index="0"]
+shape = SubResource("RectangleShape2D_1dus7")

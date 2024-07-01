@@ -1,4 +1,5 @@
 using Godot;
+using Menus.Settings;
 
 namespace Camera;
 
@@ -38,6 +39,8 @@ public partial class Camera : Camera2D {
 	}
 
 	private void Shake() {
+		if (!Settings.ScreenShakeEnabled) return;
+
 		Vector2 desiredPosition = new(
 			x: (float) GD.RandRange(-_shakeIntensity, _shakeIntensity),
 			y: (float) GD.RandRange(-_shakeIntensity, _shakeIntensity)

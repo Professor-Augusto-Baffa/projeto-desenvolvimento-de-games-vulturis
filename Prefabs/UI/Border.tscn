@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyus8utcb7p4s"]
+
+[ext_resource type="Texture2D" uid="uid://uwlu5i5lm6ql" path="res://Sprites/UI/Window Borders/Borders.png" id="1_1256j"]
+
+[node name="Border" type="NinePatchRect"]
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("1_1256j")
+region_rect = Rect2(192, 0, 48, 48)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16

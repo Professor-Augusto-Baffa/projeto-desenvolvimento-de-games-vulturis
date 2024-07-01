@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://clbu5s2w2e6e2"]
+
+[ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Characters/Enemies/Enemy.tscn" id="1_l8p4x"]
+[ext_resource type="PackedScene" uid="uid://bkwuoer4jm0mu" path="res://Prefabs/Characters/Forms/WheelBot.tscn" id="2_e8l8w"]
+[ext_resource type="Shape2D" uid="uid://deay2r65rx6pw" path="res://Resources/Collision Shapes/Wheel Bot Collision Shape.tres" id="4_6th5a"]
+[ext_resource type="Shape2D" uid="uid://cwe8ni67vinqu" path="res://Resources/Detection Areas/Large Detection Area.tres" id="4_7eao8"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Behaviour/WheelBot.cs" id="4_bcyxl"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_k46jo"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_imv04"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0kpuy"]
+size = Vector2(128, 22)
+
+[node name="WheelBot" instance=ExtResource("1_l8p4x")]
+
+[node name="Form" parent="." index="0" instance=ExtResource("2_e8l8w")]
+
+[node name="CollisionShape2D" parent="." index="5"]
+shape = ExtResource("4_6th5a")
+
+[node name="StateController" parent="." index="6"]
+script = ExtResource("4_bcyxl")
+
+[node name="DetectionRange" parent="StateController" index="0"]
+position = Vector2(0, -20)
+
+[node name="CollisionShape2D" parent="StateController/DetectionRange" index="0"]
+shape = ExtResource("4_7eao8")
+
+[node name="CollisionShape2D" parent="StateController/AttackRange" index="0"]
+shape = SubResource("RectangleShape2D_0kpuy")
+
+[node name="ToSpecialAttack" type="Node" parent="StateController/StateChart/CompoundState/Attacking" index="3"]
+script = ExtResource("7_imv04")
+to = NodePath("../../SpecialAttack")
+event = &"ToSpecialAttack"
+delay_in_seconds = "0.0"
+
+[node name="SpecialAttack" type="Node" parent="StateController/StateChart/CompoundState" index="7"]
+script = ExtResource("6_k46jo")
+
+[node name="ToCooldown" type="Node" parent="StateController/StateChart/CompoundState/SpecialAttack" index="0"]
+script = ExtResource("7_imv04")
+to = NodePath("../../Cooldown")
+event = &"ToCooldown"
+delay_in_seconds = "0.0"
+
+[node name="ToIdle" type="Node" parent="StateController/StateChart/CompoundState/SpecialAttack" index="1"]
+script = ExtResource("7_imv04")
+to = NodePath("../../Idle")
+event = &"ToIdle"
+delay_in_seconds = "0.0"
+
+[node name="ToChasing" type="Node" parent="StateController/StateChart/CompoundState/SpecialAttack" index="2"]
+script = ExtResource("7_imv04")
+to = NodePath("../../Chasing")
+event = &"ToChasing"
+delay_in_seconds = "0.0"
+
+[connection signal="state_entered" from="StateController/StateChart/CompoundState/SpecialAttack" to="StateController" method="OnSpecialStarted"]
+[connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/SpecialAttack" to="StateController" method="SpecialAttack"]

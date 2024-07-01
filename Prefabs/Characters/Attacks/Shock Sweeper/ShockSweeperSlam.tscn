@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=3 uid="uid://p12g325xt58l"]
+
+[ext_resource type="PackedScene" uid="uid://47gnpb432gur" path="res://Prefabs/Characters/Attacks/AttackBase.tscn" id="1_4i8e0"]
+[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Shock Sweeper/ShockSweeperSlam.cs" id="2_vvxx5"]
+[ext_resource type="Texture2D" uid="uid://caowtige2he28" path="res://Sprites/Forms/Shock Sweeper/Attacks/VFX for Slam.png" id="3_ukwd0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldcyg"]
+atlas = ExtResource("3_ukwd0")
+region = Rect2(0, 0, 64, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jj8bm"]
+atlas = ExtResource("3_ukwd0")
+region = Rect2(0, 30, 64, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhl7d"]
+atlas = ExtResource("3_ukwd0")
+region = Rect2(0, 60, 64, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8x5f"]
+atlas = ExtResource("3_ukwd0")
+region = Rect2(0, 90, 64, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgu8m"]
+atlas = ExtResource("3_ukwd0")
+region = Rect2(0, 120, 64, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5bf4o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldcyg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jj8bm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhl7d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8x5f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pgu8m")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iljyd"]
+size = Vector2(55, 27)
+
+[node name="ShockSweeperSlam" instance=ExtResource("1_4i8e0")]
+position = Vector2(7, 2)
+script = ExtResource("2_vvxx5")
+_paralizeDuration = 0.5
+Damage = 2
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_5bf4o")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(-0.5, -5.5)
+shape = SubResource("RectangleShape2D_iljyd")
+
+[node name="Timer" parent="." index="2"]
+wait_time = 0.5

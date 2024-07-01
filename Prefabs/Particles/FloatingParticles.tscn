@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjj3vxpepbmwx"]
+
+[sub_resource type="Gradient" id="Gradient_5ucd0"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_synhw"]
+gradient = SubResource("Gradient_5ucd0")
+
+[sub_resource type="Curve" id="Curve_o5c0w"]
+max_value = 100.0
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_0150i"]
+curve_y = SubResource("Curve_o5c0w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cpcwy"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(100, 100, 1)
+directional_velocity_min = 1.0
+directional_velocity_max = 1.0
+directional_velocity_curve = SubResource("CurveXYZTexture_0150i")
+color_ramp = SubResource("GradientTexture1D_synhw")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+
+[node name="FloatingParticles" type="GPUParticles2D"]
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_cpcwy")
+lifetime = 2.0

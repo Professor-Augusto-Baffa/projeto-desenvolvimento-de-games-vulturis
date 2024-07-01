@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://dhn5r8gasmrxa"]
+[gd_scene load_steps=20 format=3 uid="uid://dhn5r8gasmrxa"]
 
 [ext_resource type="Texture2D" uid="uid://db057wmxps7hn" path="res://Sprites/Objects/Door/door open 41x48.png" id="1_4ss58"]
 [ext_resource type="Script" path="res://Scripts/Objects/Door.cs" id="1_w81bc"]
+[ext_resource type="AudioStream" uid="uid://bv7sjip0spumw" path="res://Audio/Sound Effects/Objects/door.wav" id="3_3yq14"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cndj8"]
 atlas = ExtResource("1_4ss58")
@@ -122,4 +123,9 @@ _openDuration = 0.6
 sprite_frames = SubResource("SpriteFrames_4mrnx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_a233u")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_3yq14")
+volume_db = 12.0

@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cuheihofndfy7"]
+[gd_scene load_steps=7 format=3 uid="uid://cuheihofndfy7"]
 
 [ext_resource type="Script" path="res://Scripts/Objects/HealthUpgrade.cs" id="1_3ky7g"]
 [ext_resource type="Texture2D" uid="uid://ch55pehjo4ikp" path="res://Sprites/UI/HUD/Health Container.png" id="2_ef35t"]
+[ext_resource type="AudioStream" uid="uid://b4ta3p2ham7r5" path="res://Audio/Sound Effects/Objects/upgrade.wav" id="3_42rmb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yexxx"]
 atlas = ExtResource("2_ef35t")
@@ -30,5 +31,9 @@ sprite_frames = SubResource("SpriteFrames_5loxq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_uco62")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_42rmb")
+volume_db = 12.0
 
 [connection signal="body_entered" from="." to="." method="OnBodyEntered"]
