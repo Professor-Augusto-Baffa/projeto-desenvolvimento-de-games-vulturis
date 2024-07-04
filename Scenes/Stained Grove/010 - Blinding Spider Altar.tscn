@@ -38,8 +38,8 @@ layer_2/tile_data = PackedInt32Array(1703985, 1, 720896, 1703980, 1, 720896, 137
 
 [node name="SceneTransfer" parent="." instance=ExtResource("2_aoah8")]
 position = Vector2(-16, 32)
-_nextScene = "res://Scenes/Stained Grove/006 - Intersection.tscn"
-_positionInNextScene = Vector2(342, 413)
+_nextScene = "res://Scenes/Stained Grove/009 - Overgrown Roots.tscn"
+_positionInNextScene = Vector2(822, -44)
 
 [node name="CollisionShape2D" parent="SceneTransfer" index="0"]
 shape = SubResource("RectangleShape2D_neh4t")
@@ -58,7 +58,7 @@ _delayDuration = 1.0
 position = Vector2(412, 333)
 
 [node name="AltarTutorial" parent="." instance=ExtResource("8_gvwvi")]
-position = Vector2(752, 399)
+position = Vector2(721, 415)
 _tutorialOverlay = ExtResource("9_yre8n")
 _delayDuration = 1.0
 

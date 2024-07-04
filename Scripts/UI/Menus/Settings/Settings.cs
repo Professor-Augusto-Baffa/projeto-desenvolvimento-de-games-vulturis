@@ -13,6 +13,7 @@ public partial class Settings : Control {
 	public static bool FriendlyFireEnabled { get; private set; }
 	public static bool ScreenShakeEnabled { get; private set; }
 	public static bool HitStopEnabled { get; private set; }
+	public static bool SkipTutorials { get; private set; }
 
 	public static float MusicVolume { get; private set; }
 	public static float SoundEffectsVolume { get; private set; }
@@ -27,6 +28,7 @@ public partial class Settings : Control {
 		GetNode<CheckButton>(_settingsButtonPath + "/FriendlyFireCheckButton").ButtonPressed = FriendlyFireEnabled;
 		GetNode<CheckButton>(_settingsButtonPath + "/ScreenShakeCheckButton").ButtonPressed = ScreenShakeEnabled;
 		GetNode<CheckButton>(_settingsButtonPath + "/HitstopCheckButton").ButtonPressed = HitStopEnabled;
+		GetNode<CheckButton>(_settingsButtonPath + "/SkipTutorialsCheckButton").ButtonPressed = SkipTutorials;
 	}
 
 	public static void SetValuesFrom(SettingsFileModel settings) {
@@ -44,6 +46,7 @@ public partial class Settings : Control {
 		FriendlyFireEnabled = settings.FriendlyFireEnabled;
 		ScreenShakeEnabled = settings.ScreenShakeEnabled;
 		HitStopEnabled = settings.HitStopEnabled;
+		SkipTutorials = settings.SkipTutorials;
 	}
 
 	public static void SaveSettings() {
@@ -54,7 +57,8 @@ public partial class Settings : Control {
 			playerIndentifiersEnabled: PlayerIndentifiersEnabled,
 			friendlyFireEnabled: FriendlyFireEnabled,
 			screenShakeEnabled: ScreenShakeEnabled,
-			hitStopEnabled: HitStopEnabled
+			hitStopEnabled: HitStopEnabled,
+			skipTutorials: SkipTutorials
 		));
 	}
 
@@ -89,15 +93,11 @@ public partial class Settings : Control {
 		}
 	}
 
-	public static void OnFriendlyFireButtonToggled(bool toggle) {
-		FriendlyFireEnabled = toggle;
-	}
+	public static void OnFriendlyFireButtonToggled(bool toggle) => FriendlyFireEnabled = toggle;
 
-	public static void OnScreenShakeButtonToggled(bool toggle) {
-		ScreenShakeEnabled = toggle;
-	}
+	public static void OnScreenShakeButtonToggled(bool toggle) => ScreenShakeEnabled = toggle;
 
-	public static void OnHitStopButtonToggled(bool toggle) {
-		HitStopEnabled = toggle;
-	}
+	public static void OnHitStopButtonToggled(bool toggle) => HitStopEnabled = toggle;
+
+	public static void OnSkipTutorialsButtonToggled(bool toggle) => SkipTutorials = toggle;
 }

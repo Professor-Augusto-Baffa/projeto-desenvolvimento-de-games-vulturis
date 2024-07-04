@@ -19,10 +19,14 @@ public partial class FocusController : Control {
 
 		foreach (StringName action in _actionsThatActivateFocus) {
 			if (@event.IsActionPressed(action)) {
-				_firstFocusedNode.GrabFocus();
-				_activatedFocus = true;
+				GrabFocus();
 				break;
 			}
 		}
 	}
+
+    public new void GrabFocus() {
+        _activatedFocus = true;
+        _firstFocusedNode.GrabFocus();
+    }
 }

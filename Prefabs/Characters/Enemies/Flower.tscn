@@ -1,12 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cemcwjdmaxgyg"]
+[gd_scene load_steps=7 format=3 uid="uid://cemcwjdmaxgyg"]
 
 [ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Characters/Enemies/Enemy.tscn" id="1_shomi"]
 [ext_resource type="PackedScene" uid="uid://dnlg6435ikqsl" path="res://Prefabs/Characters/Forms/Flower.tscn" id="2_jtxx7"]
+[ext_resource type="Script" path="res://Scripts/Characters/Enemies/States/Taunt.cs" id="3_r2efh"]
 [ext_resource type="Shape2D" uid="uid://ct3xuog7cnsys" path="res://Resources/Detection Areas/Small Detection Area.tres" id="4_2ciny"]
 [ext_resource type="Shape2D" uid="uid://cht275yski3l7" path="res://Resources/Collision Shapes/Flower Collision Shape.tres" id="4_4kllh"]
-[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Behaviour/Flower.cs" id="4_afmgk"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_dplry"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_hfadt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7k3bu"]
 size = Vector2(48, 30)
@@ -15,11 +13,18 @@ size = Vector2(48, 30)
 
 [node name="Form" parent="." index="0" instance=ExtResource("2_jtxx7")]
 
-[node name="CollisionShape2D" parent="." index="5"]
-shape = ExtResource("4_4kllh")
+[node name="CooldownBehaviour" parent="." index="1"]
+script = ExtResource("3_r2efh")
+_speedMultiplier = 0.3
 
-[node name="StateController" parent="." index="6"]
-script = ExtResource("4_afmgk")
+[node name="Timer" parent="CooldownBehaviour" index="0"]
+wait_time = 1.5
+
+[node name="DirectionChangeTimer" type="Timer" parent="CooldownBehaviour" index="1"]
+wait_time = 0.5
+
+[node name="CollisionShape2D" parent="." index="6"]
+shape = ExtResource("4_4kllh")
 
 [node name="DetectionRange" parent="StateController" index="0"]
 position = Vector2(0, -7)
@@ -31,71 +36,4 @@ shape = ExtResource("4_2ciny")
 position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_7k3bu")
 
-[node name="ToBackward" type="Node" parent="StateController/StateChart/CompoundState/Attacking" index="3"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Backward")
-event = &"ToBackward"
-delay_in_seconds = "0.0"
-
-[node name="Backward" type="Node" parent="StateController/StateChart/CompoundState" index="7"]
-script = ExtResource("5_hfadt")
-
-[node name="ToForward" type="Node" parent="StateController/StateChart/CompoundState/Backward" index="0"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Forward")
-event = &"ToForward"
-delay_in_seconds = "0.0"
-
-[node name="ToStunned" type="Node" parent="StateController/StateChart/CompoundState/Backward" index="1"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Stunned")
-event = &"ToStunned"
-delay_in_seconds = "0.0"
-
-[node name="ToDefeated" type="Node" parent="StateController/StateChart/CompoundState/Backward" index="2"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Defeated")
-event = &"ToDefeated"
-delay_in_seconds = "0.0"
-
-[node name="Forward" type="Node" parent="StateController/StateChart/CompoundState" index="8"]
-script = ExtResource("5_hfadt")
-
-[node name="ToCooldown" type="Node" parent="StateController/StateChart/CompoundState/Forward" index="0"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Cooldown")
-event = &"ToCooldown"
-delay_in_seconds = "0.0"
-
-[node name="ToBackward" type="Node" parent="StateController/StateChart/CompoundState/Forward" index="1"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Backward")
-event = &"ToBackward"
-delay_in_seconds = "0.0"
-
-[node name="FromBehaviourToIdle" type="Node" parent="StateController/StateChart/CompoundState/Forward" index="2"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Idle")
-event = &"FromBehaviourToIdle"
-delay_in_seconds = "0.0"
-
-[node name="FromBehaviourToChasing" type="Node" parent="StateController/StateChart/CompoundState/Forward" index="3"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Chasing")
-event = &"FromBehaviourToChasing"
-delay_in_seconds = "0.0"
-
-[node name="ToStunned" type="Node" parent="StateController/StateChart/CompoundState/Forward" index="4"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Stunned")
-event = &"ToStunned"
-delay_in_seconds = "0.0"
-
-[node name="ToDefeated" type="Node" parent="StateController/StateChart/CompoundState/Forward" index="5"]
-script = ExtResource("5_dplry")
-to = NodePath("../../Defeated")
-event = &"ToDefeated"
-delay_in_seconds = "0.0"
-
-[connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Backward" to="StateController" method="Backward"]
-[connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Forward" to="StateController" method="Forward"]
+[connection signal="timeout" from="CooldownBehaviour/DirectionChangeTimer" to="CooldownBehaviour" method="ChangeDirections"]

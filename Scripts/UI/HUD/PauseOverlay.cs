@@ -5,14 +5,14 @@ using SceneController;
 namespace Menus.Overlays;
 
 public partial class PauseOverlay : FocusController {
+    private NinePatchRect _border;
+    private AnimationPlayer _colorRectAnimationPlayer;
+    private FocusController _buttonsFocusController;
+
 	[Export(PropertyHint.File, "*.tscn")]
 	private string _settingsScenePath;
 
     private bool _paused = false;
-
-    private NinePatchRect _border;
-    private AnimationPlayer _colorRectAnimationPlayer;
-    private FocusController _buttonsFocusController;
 
     public override void _Ready() {
         base._Ready();
@@ -39,15 +39,15 @@ public partial class PauseOverlay : FocusController {
 
     private async void Pause() {
         GetTree().Paused = true;
+        _paused = true;
         Visible = true;
         _border.Visible = false;
-        _paused = true;
 
         _colorRectAnimationPlayer.Play("fade");
         await ToSignal(_colorRectAnimationPlayer, "animation_finished");
 
         _border.Visible = true;
-        _firstFocusedNode.GrabFocus();
+        GrabFocus();
     }
 
     public void OnContinueButtonPressed() {
@@ -67,5 +67,6 @@ public partial class PauseOverlay : FocusController {
         scene.GetNode("SettingsBorder/CreditsButtonBorder").QueueFree();
 
 		BaseScene.UICanvas.AddChild(scene);
+        _activatedFocus = false;
     }
 }

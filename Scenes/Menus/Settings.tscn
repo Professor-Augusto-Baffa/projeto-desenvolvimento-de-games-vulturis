@@ -150,8 +150,14 @@ text = "Screen shake"
 [node name="HitstopCheckButton" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../ScreenShakeCheckButton")
-focus_neighbor_bottom = NodePath("../../../CreditsButtonBorder/Button")
+focus_neighbor_bottom = NodePath("../SkipTutorialsCheckButton")
 text = "Freeze game after damage is taken or dealt"
+
+[node name="SkipTutorialsCheckButton" type="CheckButton" parent="SettingsBorder/ScrollContainer/VScrollBar"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../HitstopCheckButton")
+focus_neighbor_bottom = NodePath("../../../CreditsButtonBorder/Button")
+text = "Skip tutorials"
 
 [node name="CreditsButtonBorder" parent="SettingsBorder" instance=ExtResource("4_wi3gd")]
 layout_mode = 0
@@ -227,4 +233,5 @@ text = "Settings"
 [connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/FriendlyFireCheckButton" to="." method="OnFriendlyFireButtonToggled"]
 [connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/ScreenShakeCheckButton" to="." method="OnScreenShakeButtonToggled"]
 [connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/HitstopCheckButton" to="." method="OnHitStopButtonToggled"]
+[connection signal="toggled" from="SettingsBorder/ScrollContainer/VScrollBar/SkipTutorialsCheckButton" to="." method="OnSkipTutorialsButtonToggled"]
 [connection signal="pressed" from="SettingsBorder/CreditsButtonBorder/Button" to="SettingsBorder/CreditsButtonBorder/Button" method="OnPressed"]

@@ -19,6 +19,7 @@ size = Vector2(50, 23)
 z_index = 1
 collision_layer = 2
 script = ExtResource("1_5pso5")
+_speedDuringAttackMultiplier = 0.3
 _dodgeSpeed = 100.0
 _jumpCoyoteTimeDuration = 0.1
 _damageParalizeDuration = 0.3

@@ -51,15 +51,15 @@ shape = SubResource("RectangleShape2D_u6ky4")
 [node name="SceneTransfer2" parent="." instance=ExtResource("3_johvr")]
 position = Vector2(-16, 120)
 _nextScene = "res://Scenes/Stained Grove/007 - Intersection Save.tscn"
-_positionInNextScene = Vector2(8, -3)
+_positionInNextScene = Vector2(3, -3)
 
 [node name="CollisionShape2D" parent="SceneTransfer2" index="0"]
 shape = SubResource("RectangleShape2D_7wsjv")
 
 [node name="SceneTransfer3" parent="." instance=ExtResource("3_johvr")]
 position = Vector2(368, 384)
-_nextScene = "res://Scenes/Stained Grove/010 - Blinding Spider Altar.tscn"
-_positionInNextScene = Vector2(10, 45)
+_nextScene = "res://Scenes/Stained Grove/009 - Overgrown Roots.tscn"
+_positionInNextScene = Vector2(10, -3)
 
 [node name="CollisionShape2D" parent="SceneTransfer3" index="0"]
 shape = SubResource("RectangleShape2D_d5bc4")

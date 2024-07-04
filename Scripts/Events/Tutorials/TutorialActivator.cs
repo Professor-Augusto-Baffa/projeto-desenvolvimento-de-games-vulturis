@@ -1,4 +1,5 @@
 using Godot;
+using Menus.Settings;
 using SceneController;
 
 namespace Events.Tutorials;
@@ -23,6 +24,12 @@ public partial class TutorialActivator : Node {
 	public async void DisplayOverlay() {
 		if (_activated) return;
 		_activated = true;
+		BaseScene.ProgressionController.TutorialsCompleted.Add(this.Name);
+
+		if (Settings.SkipTutorials) {
+			QueueFree();
+			return;
+		}
 
 		if (_delayDuration > 0) {
 			Control pauseBlocker = new(); // This is used to disable pausing while the timer is running.
@@ -34,7 +41,6 @@ public partial class TutorialActivator : Node {
 			pauseBlocker.QueueFree();
 		}
 
-		BaseScene.ProgressionController.TutorialsCompleted.Add(this.Name);
 		BaseScene.UICanvas.AddChild(_tutorialOverlay.Instantiate());
 		QueueFree();
 	}

@@ -27,7 +27,7 @@ public partial class PlayerController : Node {
 
     public override void _Process(double delta) {
         if (_player.CanMove) {
-            _player.HorizontalDirection = Input.GetAxis(_moveLeft, _moveRight);
+            _player.Direction.X = Input.GetAxis(_moveLeft, _moveRight);
         }
     }
 

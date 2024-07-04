@@ -11,11 +11,12 @@ public class SettingsFileModel : IFileModel {
 	public bool FriendlyFireEnabled { get; private set; } = false;
 	public bool ScreenShakeEnabled { get; private set; } = true;
 	public bool HitStopEnabled { get; private set; } = true;
+    public bool SkipTutorials { get; private set; } = false;
 
     public SettingsFileModel(
         float musicVolume, float soundEffectsVolume,
         bool fullScreenEnabled, bool playerIndentifiersEnabled, bool friendlyFireEnabled,
-        bool screenShakeEnabled, bool hitStopEnabled
+        bool screenShakeEnabled, bool hitStopEnabled, bool skipTutorials
     ) {
         MusicVolume = musicVolume;
         SoundEffectsVolume = soundEffectsVolume;
@@ -24,6 +25,7 @@ public class SettingsFileModel : IFileModel {
         FriendlyFireEnabled = friendlyFireEnabled;
         ScreenShakeEnabled = screenShakeEnabled;
         HitStopEnabled = hitStopEnabled;
+        SkipTutorials = skipTutorials;
     }
 
     public SettingsFileModel(string json) {
@@ -36,6 +38,7 @@ public class SettingsFileModel : IFileModel {
         FriendlyFireEnabled = (bool) data["friendlyFireEnabled"];
         ScreenShakeEnabled = (bool) data["screenShakeEnabled"];
         HitStopEnabled = (bool) data["hitStopEnabled"];
+        SkipTutorials = (bool) data["skipTutorials"];
     }
 
     /// <summary> Settings data constructor with default values. </summary>
@@ -50,6 +53,7 @@ public class SettingsFileModel : IFileModel {
             { "friendlyFireEnabled", FriendlyFireEnabled },
             { "screenShakeEnabled", ScreenShakeEnabled },
             { "hitStopEnabled", HitStopEnabled },
+            { "skipTutorials", SkipTutorials },
         }
     );
 }

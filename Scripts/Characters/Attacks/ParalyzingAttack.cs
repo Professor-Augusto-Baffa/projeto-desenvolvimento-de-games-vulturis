@@ -9,7 +9,7 @@ public abstract partial class ParalyzingAttack : AttackBase {
 
     public override void OnCharacterEntered(Node2D node) {
         base.OnCharacterEntered(node);
-        if (node is Character character && !character.IsDefeated) {
+        if (node is Character character && !character.IsInvincible) {
             character.StartParalyze(paralyzeDuration: _paralizeDuration, shouldApplyEffects: true);
         }
     }

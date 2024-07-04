@@ -2,9 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Characters/Enemies/Enemy.tscn" id="1_l8p4x"]
 [ext_resource type="PackedScene" uid="uid://bkwuoer4jm0mu" path="res://Prefabs/Characters/Forms/WheelBot.tscn" id="2_e8l8w"]
+[ext_resource type="Script" path="res://Scripts/Characters/Enemies/States/StandStill.cs" id="3_dphj1"]
 [ext_resource type="Shape2D" uid="uid://deay2r65rx6pw" path="res://Resources/Collision Shapes/Wheel Bot Collision Shape.tres" id="4_6th5a"]
 [ext_resource type="Shape2D" uid="uid://cwe8ni67vinqu" path="res://Resources/Detection Areas/Large Detection Area.tres" id="4_7eao8"]
-[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Behaviour/WheelBot.cs" id="4_bcyxl"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_k46jo"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_imv04"]
 
@@ -15,11 +15,11 @@ size = Vector2(128, 22)
 
 [node name="Form" parent="." index="0" instance=ExtResource("2_e8l8w")]
 
-[node name="CollisionShape2D" parent="." index="5"]
-shape = ExtResource("4_6th5a")
+[node name="CooldownBehaviour" parent="." index="1"]
+script = ExtResource("3_dphj1")
 
-[node name="StateController" parent="." index="6"]
-script = ExtResource("4_bcyxl")
+[node name="CollisionShape2D" parent="." index="6"]
+shape = ExtResource("4_6th5a")
 
 [node name="DetectionRange" parent="StateController" index="0"]
 position = Vector2(0, -20)

@@ -64,4 +64,9 @@ public abstract partial class Character : CharacterBody2D {
 		);
 		Engine.TimeScale = 1;
 	}
+
+	public void Fall(double delta) {
+		this.Velocity = new Vector2(0, this.Velocity.Y + (float) (Gravity * delta));
+		MoveAndSlide();
+	}
 }

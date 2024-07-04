@@ -11,7 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://cq4apbbwj0enx" path="res://Audio/Sound Effects/Characters/landing.wav" id="4_v0wn2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_l0vi1"]
 [ext_resource type="AudioStream" uid="uid://bikk61vwg5shx" path="res://Audio/Sound Effects/Characters/paralysis.wav" id="5_sovva"]
-[ext_resource type="Script" path="res://Scripts/Characters/Attacks/Behaviour/StateController.cs" id="5_wushj"]
+[ext_resource type="Script" path="res://Scripts/Characters/Enemies/States/StateController.cs" id="5_wushj"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="6_xn6al"]
 
 [node name="Enemy" type="CharacterBody2D"]
@@ -28,6 +28,12 @@ JumpSpeed = 150.0
 JumpSound = ExtResource("3_0u2o7")
 LandingSound = ExtResource("4_v0wn2")
 ParalyzeSound = ExtResource("5_sovva")
+
+[node name="CooldownBehaviour" type="Node" parent="."]
+
+[node name="Timer" type="Timer" parent="CooldownBehaviour"]
+wait_time = 0.8
+one_shot = true
 
 [node name="CheckHoleL" type="RayCast2D" parent="."]
 visible = false
@@ -116,6 +122,12 @@ to = NodePath("../../Stunned")
 event = &"ToStunned"
 delay_in_seconds = "0.0"
 
+[node name="ToParalyzed" type="Node" parent="StateController/StateChart/CompoundState/Idle"]
+script = ExtResource("6_xn6al")
+to = NodePath("../../Paralyzed")
+event = &"ToParalyzed"
+delay_in_seconds = "0.0"
+
 [node name="Chasing" type="Node" parent="StateController/StateChart/CompoundState"]
 script = ExtResource("5_l0vi1")
 
@@ -143,6 +155,12 @@ to = NodePath("../../Stunned")
 event = &"ToStunned"
 delay_in_seconds = "0.0"
 
+[node name="ToParalyzed" type="Node" parent="StateController/StateChart/CompoundState/Chasing"]
+script = ExtResource("6_xn6al")
+to = NodePath("../../Paralyzed")
+event = &"ToParalyzed"
+delay_in_seconds = "0.0"
+
 [node name="Attacking" type="Node" parent="StateController/StateChart/CompoundState"]
 script = ExtResource("5_l0vi1")
 
@@ -162,6 +180,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("6_xn6al")
 to = NodePath("../../Stunned")
 event = &"ToStunned"
+delay_in_seconds = "0.0"
+
+[node name="ToParalyzed" type="Node" parent="StateController/StateChart/CompoundState/Attacking"]
+script = ExtResource("6_xn6al")
+to = NodePath("../../Paralyzed")
+event = &"ToParalyzed"
 delay_in_seconds = "0.0"
 
 [node name="Cooldown" type="Node" parent="StateController/StateChart/CompoundState"]
@@ -195,6 +219,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("6_xn6al")
 to = NodePath("../../Stunned")
 event = &"ToStunned"
+delay_in_seconds = "0.0"
+
+[node name="ToParalyzed" type="Node" parent="StateController/StateChart/CompoundState/Cooldown"]
+script = ExtResource("6_xn6al")
+to = NodePath("../../Paralyzed")
+event = &"ToParalyzed"
 delay_in_seconds = "0.0"
 
 [node name="Paralyzed" type="Node" parent="StateController/StateChart/CompoundState"]
@@ -233,10 +263,6 @@ one_shot = true
 wait_time = 0.2
 one_shot = true
 
-[node name="CoolDownTimer" type="Timer" parent="Timers"]
-wait_time = 0.8
-one_shot = true
-
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 bus = &"Sound Effects"
 
@@ -245,15 +271,18 @@ bus = &"Sound Effects"
 [connection signal="NewTargetNeeded" from="." to="StateController" method="SelectNextTarget"]
 [connection signal="Paralyzed" from="." to="StateController" method="OnParalyzed"]
 [connection signal="Stunned" from="." to="StateController" method="OnStunned"]
+[connection signal="timeout" from="CooldownBehaviour/Timer" to="CooldownBehaviour" method="OnEnd"]
 [connection signal="body_entered" from="StateController/DetectionRange" to="StateController" method="OnBodyEnteredDetectionRange"]
 [connection signal="body_exited" from="StateController/DetectionRange" to="StateController" method="OnBodyExitedDetectionRange"]
 [connection signal="body_entered" from="StateController/AttackRange" to="StateController" method="OnBodyEnteredAttackRange"]
 [connection signal="body_exited" from="StateController/AttackRange" to="StateController" method="OnBodyExitedAttackRange"]
 [connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Idle" to="." method="Idle"]
 [connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Chasing" to="." method="Chase"]
-[connection signal="state_entered" from="StateController/StateChart/CompoundState/Attacking" to="StateController" method="StartAttack"]
-[connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Attacking" to="StateController" method="Attack"]
-[connection signal="state_entered" from="StateController/StateChart/CompoundState/Cooldown" to="." method="StartCooldown"]
+[connection signal="state_entered" from="StateController/StateChart/CompoundState/Attacking" to="." method="StartAttack"]
+[connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Attacking" to="." method="Attack"]
+[connection signal="state_entered" from="StateController/StateChart/CompoundState/Cooldown" to="CooldownBehaviour" method="OnStart"]
+[connection signal="state_exited" from="StateController/StateChart/CompoundState/Cooldown" to="CooldownBehaviour" method="OnEnd"]
+[connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Cooldown" to="CooldownBehaviour" method="Process"]
 [connection signal="state_physics_processing" from="StateController/StateChart/CompoundState/Defeated" to="." method="Fade"]
 [connection signal="timeout" from="Timers/ParalyzeTimer" to="." method="StopParalize"]
 [connection signal="timeout" from="Timers/FadeOutTimer" to="." method="OnFadeOut"]

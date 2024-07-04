@@ -5,7 +5,7 @@ namespace Attacks;
 [GlobalClass]
 public partial class AttackStats : Resource {
     /// <summary>
-    /// Attack total duration in seconds. The duration characters is considered to be attacking, usually the animation duration.
+    /// Attack total duration in seconds. The duration the character is considered to be attacking (usually the animation duration).
     /// </summary>
     [Export]
     public float Duration { get; private set; }

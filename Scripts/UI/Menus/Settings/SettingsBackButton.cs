@@ -1,4 +1,5 @@
 using Godot;
+using Menus.Overlays;
 using SceneController;
 
 namespace Menus.Settings;
@@ -13,6 +14,7 @@ public partial class SettingsBackButton : SceneChangerButton {
 
 		if (currentScene is BaseScene) { // acessed from the pause overlay
 			GetParent().QueueFree(); // remove the settings menu
+			GetParent().GetParent().GetNode<PauseOverlay>("PauseOverlay").GrabFocus();
 		} else {
 			base.ChangeScene();
 		}

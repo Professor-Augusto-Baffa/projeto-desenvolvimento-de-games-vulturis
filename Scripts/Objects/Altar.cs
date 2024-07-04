@@ -18,38 +18,53 @@ public partial class Altar : Area2D {
 	[Signal]
 	public delegate void FormUnlockedEventHandler();
 
-	public bool WasUsed { get; private set; } = false;
+	public bool IsBeingUsed = false;
+	private bool _wasUsed = false;
 
 	public override void _Ready() {
 		_form = GetNode<Form>("Form");
-		WasUsed = BaseScene.ProgressionController.IsFormUnlocked(_form.FormName);
+		_wasUsed = BaseScene.ProgressionController.IsFormUnlocked(_form.FormName);
 
 		_formSprite = _form.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		_formSprite.Modulate = WasUsed ? _colorAfterUnlock : _colorBeforeUnlock;
+		_formSprite.Modulate = _wasUsed ? _colorAfterUnlock : _colorBeforeUnlock;
 
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_sprite.Play();
 	}
 
+	public async void Activate() {
+		if (!_wasUsed) {
+			UnlockForm();
+		} else {
+			TransformPlayers();
+		}
+
+		IsBeingUsed = true;
+		_sprite.Play("use");
+		await ToSignal(_sprite, AnimatedSprite2D.SignalName.AnimationFinished);
+		IsBeingUsed = false;
+	}
+
 	/// <summary>
 	/// Unlocks form for future transformations in the progression controller and returns the unlocked Form.
 	/// </summary>
-	public void UnlockForm() {
+	private void UnlockForm() {
 		if (!BaseScene.ProgressionController.IsFormUnlocked(_form.FormName)) {
 			BaseScene.ProgressionController.FormsUnlocked.Add(_form.FormName);
 		}
+		_wasUsed = true;
 
 		GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D").Play();
-		_sprite.Play("use");
 		_formSprite.Modulate = _colorAfterUnlock;
-		WasUsed = true;
+		TransformPlayers();
+		EmitSignal(SignalName.FormUnlocked);
+	}
 
+	private void TransformPlayers() {
 		foreach (Player player in BaseScene.Players) {
 			Form form = (Form) _form.Duplicate();
 			form.GetNode<AnimatedSprite2D>("AnimatedSprite2D").Modulate = Colors.White;
 			player.StartTranformation(form);
 		}
-
-		EmitSignal(SignalName.FormUnlocked);
 	}
 }

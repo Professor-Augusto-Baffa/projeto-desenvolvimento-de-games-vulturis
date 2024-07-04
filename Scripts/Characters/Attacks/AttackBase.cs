@@ -95,11 +95,19 @@ public abstract partial class AttackBase : Area2D {
 		if (node == AttackUser || (node is Character character && character.IsInvincible)) return;
 
 		if (node is Player player) {
-			player.TakeDamage(Damage);
-			SetCollisionMask(false, false);
+			HitPlayer(player);
 		} else if (node is Enemy enemy) {
-			enemy.TakeDamage(Damage, Sprite.FlipH);
-			SetCollisionMask(false, false);
+			HitEnemy(enemy);
 		}
+	}
+
+	protected virtual void HitPlayer(Player player) {
+		player.TakeDamage(Damage);
+		SetCollisionMask(false, false);
+	}
+
+	protected virtual void HitEnemy(Enemy enemy) {
+		enemy.TakeDamage(Damage, Sprite.FlipH);
+		SetCollisionMask(false, false);
 	}
 }

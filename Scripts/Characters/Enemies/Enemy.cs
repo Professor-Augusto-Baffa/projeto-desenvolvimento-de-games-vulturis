@@ -7,18 +7,16 @@ using Menus.Settings;
 namespace Enemies;
 
 public partial class Enemy : Character {
-	public Timer _paralyzeTimer;
+	private Timer _paralyzeTimer;
 	private Timer _fadeOutTimer;
 	private Timer _coolDownTimer;
-
-	public int PlayerDirection () => this.Position.X < Target!.Position.X ? 1 : -1;
 
 	public override bool IsInvincible => IsDefeated || IsStunned || _isParalyzed;
 	public override bool IsDefeated => Health <= 0;
 
 	public bool IsStunned { get; private set; }
-	private bool _isParalyzed; // TODO move to StateChart
-	public bool CanChangeState => !_isParalyzed && _coolDownTimer.IsStopped();
+	private bool _isParalyzed;
+	public bool IsReadyToAttack => !_isParalyzed && _coolDownTimer.IsStopped();
 
 	public bool IsBeeingUsedInTransformation = false; // Used to avoid multiple players transforming into a single enemy
 
@@ -41,6 +39,10 @@ public partial class Enemy : Character {
 	#nullable enable
 	public Character? Target;
 
+	public Vector2 TargetDirection {
+		get => (this.Position.X > Target!.Position.X) ? Vector2.Left : Vector2.Right;
+	}
+
 	// check if there is a Hole in the left or right
 	public bool IsHoleL = false;
 	public bool IsHoleR = false;
@@ -53,7 +55,7 @@ public partial class Enemy : Character {
 		base._Ready();
 		_paralyzeTimer = GetNode<Timer>("Timers/ParalyzeTimer");
 		_fadeOutTimer = GetNode<Timer>("Timers/FadeOutTimer");
-		_coolDownTimer = GetNode<Timer>("Timers/CoolDownTimer");
+		_coolDownTimer = GetNode<Timer>("CooldownBehaviour/Timer");
 		Health = MaxHealth;
 	}
 
@@ -68,7 +70,7 @@ public partial class Enemy : Character {
 	/// </summary>
 	/// <param name="delta"></param>
 	public void Idle(double delta) {
-		Walk(delta, 0);
+		Walk(delta, direction: Vector2.Zero);
 		UpdateMovementAnimations();
 	}
 
@@ -77,78 +79,71 @@ public partial class Enemy : Character {
 	/// </summary>
 	/// <param name="delta"></param>
 	public void Chase(double delta) {
-		// pathfind to the nearest player
-		float direction = PlayerDirection();
-		if (IsHoleR && direction == 1) {
-			direction *= 0;
-		} else if(IsHoleL && direction == -1) {
-			direction *= 0;
-		}
-		Walk(delta, direction);
+		Walk(delta, TargetDirection);
 		UpdateMovementAnimations();
 	}
-	
 
-	/// <summary>
-	/// Function handle for walking
-	/// </summary>
-	/// <param name="delta"> Right or left</param>
-	/// <param name="direction"></param>
-	public void Walk(double delta, float direction) {
-		this.Velocity = new Vector2(direction * FormStats.Speed, this.Velocity.Y + (float)(Gravity * delta));
+	public void Walk(double delta, Vector2 direction, float speedMultiplier = 1) {
+		if((direction == Vector2.Right && IsHoleR) || (direction == Vector2.Left && IsHoleL)) {
+			direction = Vector2.Zero;
+		}
+
+		this.Velocity = new Vector2(
+			x: direction.X * FormStats.Speed * speedMultiplier,
+			y: this.Velocity.Y + (float) (Gravity * delta)
+		);
 		MoveAndSlide();
-	}
-	
-	public void WalkWithAnimation(double delta, float direction) {
-		// If there is a hole in that dire
-		if((direction > 0 && IsHoleR) || (direction < 0 && IsHoleL)) 
-			direction = 0;
-		
-		Walk(delta, direction);
 		UpdateMovementAnimations();
 	}
 
 	protected override void UpdateMovementAnimations() {
-		Sprite.Play(this.Velocity != Vector2.Zero ? "walk" : "idle");
+		string animation = this.Velocity != Vector2.Zero ? "walk" : "idle";
+		Sprite.Play(animation);
 
-		if (Target != null) {
-			Sprite.FlipH = this.Position.X > Target.Position.X;
-		}
-		if(this.Velocity.X < 0)
-			Sprite.FlipH = true;
-		else if(this.Velocity.X > 0)
-			Sprite.FlipH = false;
+		if (Target is null) {
+			if (this.Velocity != Vector2.Zero) {
+				Sprite.FlipH = this.Velocity.X < 0;
+			}
+		} else {
+			TurnToTarget();
+		} 
+	}
+
+	public void TurnToTarget() {
+		if (Target is null) return;
+		Sprite.FlipH = TargetDirection == Vector2.Left;
 	}
 
 	public void StartAttack() {
+		TurnToTarget();
 		if (Form.CanAttack) Form.Attack();
 	}
 
 	public void Attack(double delta) {
 		if (Form.CurrentState == Form.State.Idle) {
 			EmitSignal(SignalName.AttackEnded);
-		}
-		else {
+		} else {
 			if (Form.CanAttack) Form.Attack();
 		}
 	}
 
-	public async void StartCooldown() {
-		_coolDownTimer.Start();
-		Sprite.Play("idle");
-		await ToSignal(source: _coolDownTimer, signal: Timer.SignalName.Timeout);
-		EmitSignal(SignalName.NewTargetNeeded);
+	public void StartSpecialAction() {
+		TurnToTarget();
+		if (Form.CanUseSpecialAction) Form.SpecialAction();
 	}
 
 	public override async void StartParalyze(float paralyzeDuration, bool shouldApplyEffects = false) {
 		this.Velocity = Vector2.Zero;
-		_isParalyzed = true;
-		EmitSignal(SignalName.Paralyzed);
+		Sprite.Stop();
+		Form.StopAttack();
 		if (shouldApplyEffects) {
 			Sprite.Modulate = ParalyzeColor;
 			SoundEffectsPlayer.Stream = ParalyzeSound;
 			SoundEffectsPlayer.Play();
 		}
+
+		_isParalyzed = true;
+		EmitSignal(SignalName.Paralyzed);
 		await ToSignal(
 			source: GetTree().CreateTimer(paralyzeDuration),
 			signal: SceneTreeTimer.SignalName.Timeout
@@ -156,17 +151,17 @@ public partial class Enemy : Character {
 
 		Sprite.Modulate = Colors.White;
 		_isParalyzed = false;
-		EmitSignal(SignalName.NewTargetNeeded);
+		if (!IsDefeated) EmitSignal(SignalName.NewTargetNeeded);
 	}
 
-	public async void TakeDamage(int damage, bool attackFlipH, float? frameFreezeDuration = null) {
+	public async void TakeDamage(int damage, bool attackFlipH, float? frameFreezeDuration = null, bool shouldForceStun = false) {
 		Health -= damage;
 
 		SoundEffectsPlayer.Stream = Form.DamageSound;
 		SoundEffectsPlayer.Play();
 
 		if (IsDefeated) {
-			if (IsStunnedByRandomChance(attackedFromBehind: attackFlipH == Sprite.FlipH)) {
+			if (IsStunnedByRandomChance(attackedFromBehind: attackFlipH == Sprite.FlipH) || shouldForceStun) {
 				GetStunned();
 			} else {
 				Die();

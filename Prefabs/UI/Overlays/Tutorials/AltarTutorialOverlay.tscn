@@ -5,7 +5,7 @@
 [node name="AltarTutorialOverlay" instance=ExtResource("1_qdmqx")]
 
 [node name="RichTextLabel" parent="PopUp/Border" index="1"]
-text = "You can use this altar to unlock a new form!
+text = "You can use this altar to unlock and transform into a new form!
 
 After using an altar, you will be able to transform into any stunned monster of that type and use all its abilities.
 

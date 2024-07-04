@@ -5,9 +5,9 @@
 [node name="BlindingSpiderTutorialOverlay" instance=ExtResource("1_b7kft")]
 
 [node name="RichTextLabel" parent="PopUp/Border" index="1"]
-text = "Blinding Spider attacks paralyze monsters for a short time.
+text = "Blinding Spider attacks paralyze monsters for a short time. But they won't take damage while paralyzed.
 
-Blinding Spiders can also jump. Hold the jump button to jump higher.
+Blinding Spiders can also jump. You can hold the jump button to jump higher.
 
 Player 1: W
 Player 2: I

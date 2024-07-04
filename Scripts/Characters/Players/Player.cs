@@ -43,6 +43,9 @@ public partial class Player : Character {
 	}
 
 	[Export]
+	private float _speedDuringAttackMultiplier;
+
+	[Export]
 	private float _dodgeSpeed;
 
 	[Export]
@@ -70,11 +73,7 @@ public partial class Player : Character {
 	[Signal]
 	public delegate void AmmoChangedEventHandler(int currentAmmo, int maxAmmo);
 
-	/// <summary>
-	/// The direction the player is facing in the X axis.
-	/// -1: Left, 1: Right, 0: Stops horizontal movement
-	/// </summary>
-	public float HorizontalDirection { private get; set; } = 0;
+	public Vector2 Direction = Vector2.Zero;
 	private bool _isJumping = false;
 
 	#nullable enable
@@ -117,8 +116,8 @@ public partial class Player : Character {
 
     public override void _PhysicsProcess(double delta) {
 		// Update player's direction
-		if (!IsAttacking && HorizontalDirection != 0) {
-			Sprite.FlipH = HorizontalDirection < 0;
+		if (!IsAttacking && Direction != Vector2.Zero) {
+			Sprite.FlipH = Direction == Vector2.Left;
 		}
 
 		if (CanMove) {
@@ -151,7 +150,7 @@ public partial class Player : Character {
 			animation = AnimationNames.Contains("jump") ? "jump" : "idle";
 		} else if (!IsOnFloor()) {
 			animation = AnimationNames.Contains("fall") ? "fall" : "idle";
-		} else if (HorizontalDirection != 0) {
+		} else if (Direction != Vector2.Zero) {
 			animation = "walk";
 		}
 
@@ -223,8 +222,8 @@ public partial class Player : Character {
 	}
 
     private void Move(double delta) {
-		float xVelocity = HorizontalDirection * FormStats.Speed;
-		if (IsAttacking) xVelocity /= 3;
+		float xVelocity = Direction.X * FormStats.Speed;
+		if (IsAttacking) xVelocity *= _speedDuringAttackMultiplier;
 
 		float yVelocity;
 		if (_isJumping) {
@@ -238,13 +237,8 @@ public partial class Player : Character {
 	}
 
 	private void StopMoving() {
-		HorizontalDirection = 0;
+		Direction = Vector2.Zero;
 		this.Velocity = Vector2.Zero;
-	}
-
-	private void Fall(double delta) {
-		this.Velocity = new Vector2(0, this.Velocity.Y + (float) (Gravity * delta));
-		MoveAndSlide();
 	}
 
 	public void Jump() {
@@ -311,7 +305,7 @@ public partial class Player : Character {
 	public void SpecialAction() {
 		Ammo -= FormStats.SpecialActionAmmoCost;
 		_ammoRecoveryTimer.Start();
-		HorizontalDirection = 0;
+		Direction = Vector2.Zero;
 		Form.SpecialAction();
 	}
 
@@ -414,7 +408,7 @@ public partial class Player : Character {
 			StartHealing(player);
 
 		} else if (LookForAltar() is Altar altar) {
-			altar.UnlockForm();
+			altar.Activate();
 
 		} else if (LookForStunnedEnemy() is Enemy enemy) {
 			enemy.IsBeeingUsedInTransformation = true;
@@ -463,7 +457,7 @@ public partial class Player : Character {
 	private Altar? LookForAltar() {
 		Array<Area2D> areas = _interactionRange.GetOverlappingAreas();
 		Altar? area = (Altar?) areas.FirstOrDefault(
-			predicate: (area) => area is Altar altar && !altar.WasUsed
+			predicate: (area) => area is Altar altar && !altar.IsBeingUsed
 		);
 		return area;
 	}

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bnjxqr2slugll"]
+[gd_scene load_steps=10 format=3 uid="uid://bnjxqr2slugll"]
 
 [ext_resource type="PackedScene" uid="uid://cyus8utcb7p4s" path="res://Prefabs/UI/Border.tscn" id="1_2ub4g"]
 [ext_resource type="Script" path="res://Scripts/UI/HUD/TutorialOverlay.cs" id="1_vgai5"]
 [ext_resource type="Theme" uid="uid://c1qvrddia7qy5" path="res://Resources/Themes/TinyFontTheme.tres" id="2_qj2br"]
+[ext_resource type="Script" path="res://Scripts/UI/ScrollableRichTextLabel.cs" id="4_7eet7"]
 
 [sub_resource type="Animation" id="Animation_vm4c8"]
 resource_name = "fade"
@@ -103,6 +104,8 @@ offset_bottom = 88.0
 theme = ExtResource("2_qj2br")
 theme_override_constants/line_separation = 1
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non lorem arcu. Morbi eget ante a libero rutrum congue. Curabitur non ultricies mi, pellentesque dapibus sapien. Nullam nec lacus quam. In placerat blandit varius. Nulla eget tincidunt purus, sed rhoncus ligula. Donec condimentum lacus non dui elementum, ut iaculis erat ornare."
+script = ExtResource("4_7eet7")
+_scrollSpeed = 1
 
 [node name="TitleBoder" parent="PopUp" instance=ExtResource("1_2ub4g")]
 layout_mode = 1
@@ -167,10 +170,5 @@ offset_bottom = 27.0
 shortcut = SubResource("Shortcut_0e84n")
 text = "Close"
 flat = true
-
-[node name="Control" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [connection signal="pressed" from="PopUp/CloseButtonBorder/Button" to="." method="OnCloseButtonPressed"]

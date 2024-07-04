@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0orllp2toq2k"]
+[gd_scene load_steps=7 format=3 uid="uid://c0orllp2toq2k"]
 
 [ext_resource type="PackedScene" uid="uid://c4xpbh183e2c8" path="res://Prefabs/Characters/Enemies/Enemy.tscn" id="1_3fgeu"]
 [ext_resource type="PackedScene" uid="uid://cest1fg6sdgth" path="res://Prefabs/Characters/Forms/Assassin.tscn" id="2_jdaj5"]
+[ext_resource type="Script" path="res://Scripts/Characters/Enemies/States/StandStill.cs" id="3_aej2v"]
 [ext_resource type="Shape2D" uid="uid://cbe4ro4e4bmt7" path="res://Resources/Collision Shapes/Assassin Collision Shape.tres" id="3_e1oke"]
 [ext_resource type="Shape2D" uid="uid://cwe8ni67vinqu" path="res://Resources/Detection Areas/Large Detection Area.tres" id="4_0lkky"]
 
@@ -12,7 +13,10 @@ size = Vector2(40, 20)
 
 [node name="Form" parent="." index="0" instance=ExtResource("2_jdaj5")]
 
-[node name="CollisionShape2D" parent="." index="5"]
+[node name="CooldownBehaviour" parent="." index="1"]
+script = ExtResource("3_aej2v")
+
+[node name="CollisionShape2D" parent="." index="6"]
 shape = ExtResource("3_e1oke")
 
 [node name="DetectionRange" parent="StateController" index="0"]
